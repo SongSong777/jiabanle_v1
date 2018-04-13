@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiabanle.dao.TeamMapper">
+  <resultMap id="BaseResultMap" type="com.jiabanle.bean.Team">
+    <id column="t_id" jdbcType="SMALLINT" property="tId" />
+    <result column="t_name" jdbcType="VARCHAR" property="tName" />
+    <result column="d_id" jdbcType="SMALLINT" property="dId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    t_id, t_name, d_id
+  </sql>
+  <select id="selectByExample" parameterType="com.jiabanle.bean.TeamExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from team
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Short" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from team
+    where t_id = #{tId,jdbcType=SMALLINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short">
+    delete from team
+    where t_id = #{tId,jdbcType=SMALLINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jiabanle.bean.TeamExample">
+    delete from team
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jiabanle.bean.Team">
+    insert into team (t_id, t_name, d_id
+      )
+    values (#{tId,jdbcType=SMALLINT}, #{tName,jdbcType=VARCHAR}, #{dId,jdbcType=SMALLINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jiabanle.bean.Team">
+    insert into team
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="tId != null">
+        t_id,
+      </if>
+      <if test="tName != null">
+        t_name,
+      </if>
+      <if test="dId != null">
+        d_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tId != null">
+        #{tId,jdbcType=SMALLINT},
+      </if>
+      <if test="tName != null">
+        #{tName,jdbcType=VARCHAR},
+      </if>
+      <if test="dId != null">
+        #{dId,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jiabanle.bean.TeamExample" resultType="java.lang.Long">
+    select count(*) from team
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update team
+    <set>
+      <if test="record.tId != null">
+        t_id = #{record.tId,jdbcType=SMALLINT},
+      </if>
+      <if test="record.tName != null">
+        t_name = #{record.tName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dId != null">
+        d_id = #{record.dId,jdbcType=SMALLINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update team
+    set t_id = #{record.tId,jdbcType=SMALLINT},
+      t_name = #{record.tName,jdbcType=VARCHAR},
+      d_id = #{record.dId,jdbcType=SMALLINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jiabanle.bean.Team">
+    update team
+    <set>
+      <if test="tName != null">
+        t_name = #{tName,jdbcType=VARCHAR},
+      </if>
+      <if test="dId != null">
+        d_id = #{dId,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where t_id = #{tId,jdbcType=SMALLINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jiabanle.bean.Team">
+    update team
+    set t_name = #{tName,jdbcType=VARCHAR},
+      d_id = #{dId,jdbcType=SMALLINT}
+    where t_id = #{tId,jdbcType=SMALLINT}
+  </update>
+</mapper>

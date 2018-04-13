@@ -1,0 +1,33 @@
+@CHARSET "UTF-8";
+.navbar{
+	border-radius:0;
+	font-weight:bold;
+}
+.box{
+	overflow:hidden;
+}
+.sidebar-nav{
+	padding-left:15px;
+	width:15%;
+	float:left;
+
+}
+.nav-header{
+	display:block;
+	font-size:16px;
+	color:#000000;	
+	font-family:"Microsoft YaHei";	
+}
+.nav-header-list{
+}
+.nav-list li{
+	margin-left:15px;
+}
+.nav-list a{
+	color:#000000;
+}
+
+.content{
+	width:80%;
+	float:right;
+}
