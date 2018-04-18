@@ -33,11 +33,13 @@
 	        <h4 class="modal-title">商品补货</h4>
 	      </div>
 	      <div class="modal-body">
-	      	  <form class="form-horizontal">
+	      	  <form class="form-horizontal" id="stock_form">
+	      	  	
+	      	  
 	      	  	<div class="form-group">
 				    <label for="goods_stock_select" class="col-sm-3 control-label">商品名称</label>
 				    <div class="col-sm-6">
-				    	<select class="form-control" name="goods_id" id="goods_stock_select">
+				    	<select class="form-control" name="goodsId" id="goods_stock_select">
 						</select>
 				    </div>
 				  </div>
@@ -45,7 +47,7 @@
 				  <div class="form-group">
 				    <label for="stock_num_input" class="col-sm-3 control-label ">补货数量</label>
 				    <div class="col-sm-6">
-				    	<input type="text" name="stock_num" class="form-control" id="stock_num_input" >
+				    	<input type="text" name="stockNum" class="form-control" id="stock_num_input" >
 				       <span class="help-block"></span>				      
 				    </div>				    
 				  </div>
@@ -53,7 +55,15 @@
 				  <div class="form-group">
 				    <label for="stock_price_input" class="col-sm-3 control-label ">补货价格</label>
 				    <div class="col-sm-6">
-				    	<input type="text" name="stock_price" class="form-control" id="stock_price_input" >
+				    	<input type="text" name="stockPrice" class="form-control" id="stock_price_input" >
+				       <span class="help-block"></span>				      
+				    </div>
+				  </div>
+				  
+				  <div class="form-group">
+				    <label for="stock_sum_input" class="col-sm-3 control-label ">总额</label>
+				    <div class="col-sm-6">
+				    	<input type="text" name="sum" class="form-control" id="stock_sum_input" readonly="readonly">
 				       <span class="help-block"></span>				      
 				    </div>
 				  </div>
@@ -62,7 +72,7 @@
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-	        <button type="button" class="btn btn-primary" id="stock_btn">保存</button>
+	        <button type="button" class="btn btn-primary" id="stock_save_btn">保存</button>
 	      </div>
 	    </div>
 	  </div>
@@ -77,18 +87,18 @@
 	        <h4 class="modal-title">新增商品</h4>
 	      </div>
 	      <div class="modal-body">
-	      	  <form class="form-horizontal" enctype="multipart/form-data">
+	      	  <form class="form-horizontal" id="addGoodsForm" enctype="multipart/form-data">
 				  <div class="form-group">
-				    <label for="goodsName_add_input" class="col-sm-3 control-label">商品名称</label>
+				    <label for="name_add_input" class="col-sm-3 control-label">商品名称</label>
 				    <div class="col-sm-6">
-				      <input type="text" name="name" class="form-control" id="goods_add_input" >
+				      <input type="text" name="name" class="form-control" id="name_add_input" >
 				       <span class="help-block"></span>
 				    </div>
 				  </div>
 				  <div class="form-group">
-				    <label for="describe_add_input" class="col-sm-3 control-label">商品描述</label>
+				    <label for="description_add_input" class="col-sm-3 control-label">商品描述</label>
 				    <div class="col-sm-6">
-				    	<input type="text" name="describe" class="form-control" id="describe_add_input" >
+				    	<input type="text" name="description" class="form-control" id="description_add_input" >
 				       <span class="help-block"></span>
 				    </div>
 				  </div>
@@ -103,7 +113,7 @@
 				  <div class="form-group">
 				    <label for="image_add_input" class="col-sm-3 control-label">商品图片</label>
 				    <div class="col-sm-6">
-				    	<input type="file" name="image" class="form-control" id="image_add_input" >
+				    	<input type="file" name="file"  id="image_add_input" >
 				       <span class="help-block"></span>
 				    </div>
 				  </div>				  				  
@@ -126,18 +136,18 @@
 	        <h4 class="modal-title">编辑商品</h4>
 	      </div>
 	      <div class="modal-body">
-	      	  <form class="form-horizontal" enctype="multipart/form-data">
+	      	  <form class="form-horizontal" enctype="multipart/form-data" id="updateGoodsForm">
 				  <div class="form-group">
-				    <label for="goodsName_update_input" class="col-sm-3 control-label">商品名称</label>
+				    <label for="name_update_input" class="col-sm-3 control-label">商品名称</label>
 				    <div class="col-sm-6">
-				      <input type="text" name="name" class="form-control" id="goods_update_input" >
+				    	<input type="text" name="name" class="form-control" id="name_update_input" readonly="readonly">
 				       <span class="help-block"></span>
 				    </div>
 				  </div>
 				  <div class="form-group">
-				    <label for="describe_update_input" class="col-sm-3 control-label">商品描述</label>
+				    <label for="description_update_input" class="col-sm-3 control-label">商品描述</label>
 				    <div class="col-sm-6">
-				    	<input type="text" name="describe" class="form-control" id="describe_update_input" >
+				    	<input type="text" name="description" class="form-control" id="description_update_input" >
 				       <span class="help-block"></span>
 				    </div>
 				  </div>
@@ -152,22 +162,30 @@
 				  <div class="form-group">
 				    <label for="image_update_input" class="col-sm-3 control-label">商品图片</label>
 				    <div class="col-sm-6">
-				    	<input type="file" name="image" class="form-control" id="image_update_input" >
+				    	<img id="image_update_show" alt="" src=""/>
+				    	<input type="file" name="file" id="image_update_input" >
 				       <span class="help-block"></span>
 				    </div>
-				  </div>				  				  
+				  </div>
+				  
+				  <div class="form-group">
+				    
+				    	<input type="hidden" name="number" id="number_update_input" >
+				       
+				  </div>
+				  
+				  				  				  
 			  </form>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-	        <button type="button" class="btn btn-primary" id="goods_edit_btn">更新</button>
+	        <button type="button" class="btn btn-primary" id="goods_update_btn">更新</button>
 	      </div>
 	    </div>
 	  </div>
 	</div>
 
-	<!-- 搭建显示页面 -->
-   
+	<!-- 搭建显示页面 -->   
 	<div class="container">
 		<!-- 页面标题 -->
 		<div class="row">
@@ -183,7 +201,7 @@
 				新增
 				</button>								
 				
-				<button class="btn btn-danger" id="goods_stock_btn">
+				<button class="btn btn-danger" id="goods_stock_modal_btn">
 				<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
 				补货
 				</button>							
@@ -230,6 +248,7 @@
 	<script type="text/javascript">
 	
 		var totalRecord, currentPage;
+		var perPageNum, optionIndex;
 	
 		//1.页面加载完成后，直接发送一个ajax请求，要到分页数据
 		$(function(){
@@ -239,7 +258,7 @@
 		//跳转到相应页码的页面
 		function to_page(pn){
 			$.ajax({
-				url:"${APP_PATH}/goods",
+				url:"${APP_PATH}/allgoods",
 				data:"pn="+pn,
 				type:"GET",
 				success:function(result){
@@ -255,7 +274,7 @@
 				
 			});
 		}
-		
+		/* ----------------------------------查询显示所有-------------------------------- */
 		//解析并显示商品数据
 		function build_goods_table(result){
 			//ajax无刷新，要先清空
@@ -265,9 +284,10 @@
 			$.each(goods,function(index,item){
 				var goodsId = $("<td></td>").append(item.id);
 				var goodsName = $("<td></td>").append(item.name);
-				var goodsDescribe = $("<td></td>").append(item.describe);
+				var goodsDes = $("<td></td>").append(item.description);
 				var goodsPrice = $("<td></td>").append(item.price);
-				var goodsImage = $("<td></td>").append(item.image);
+				var image = $("<img></img>").attr("src",item.image).attr("style","width:50px;height:50px;");
+				var goodsImage = $("<td></td>").append(image).addClass("images");				
 				var goodsNumber = $("<td></td>").append(item.number);
 				var editBtn = $("<button></button>").addClass("btn btn-xs edit_btn").append("编辑");
 				//为编辑按钮添加自定义属性，来表示当前商品的id
@@ -278,10 +298,10 @@
 				
 				var btn = $("<td></td>").append(editBtn).append(" ").append(delBtn);
 				//append方法执行完成以后还是返回原来的元素
-				$("<tr></tr>").append(checkBox)
+				$("<tr></tr>")
 					.append(goodsId)
 					.append(goodsName)
-					.append(goodsDescribe)
+					.append(goodsDes)
 					.append(goodsPrice)
 					.append(goodsImage)
 					.append(goodsNumber)
@@ -299,6 +319,7 @@
 					+result.extend.pageInfo.total +"条记录");
 			totalRecord = result.extend.pageInfo.total;
 			currentPage = result.extend.pageInfo.pageNum;
+			perPageNum = result.extend.pageInfo.pageSize;
 		}
 		//解析并显示分页条
 		function build_page_nav(result){
@@ -358,6 +379,7 @@
 			navEle.appendTo("#page_nav_area");						
 		}
 		
+		/* ----------------------------------新增-------------------------------- */
 		function reset_form(ele){
 			$(ele)[0].reset();
 			//清空表单样式
@@ -365,81 +387,45 @@
 			$(ele).find(".help-block").text("");
 			
 		}
-		
 		//点击新增按钮弹出模态框
-		$("#user_add_modal_btn").click(function(){
+		$("#goods_add_modal_btn").click(function(){
 			//清除表单数据（表单完整重置：数据、样式）
-			reset_form("#userAddModal form");
-						
-			//发送ajax请求，从数据库查出列表信息，显示在下拉列表中
-			getDepts("#dept_add_select");
-			getTeams("#team_add_select")
+			reset_form("#goodsAddModal form");
 			
 			//弹出模态框
-			$("#userAddModal").modal({
+			$("#goodsAddModal").modal({
 				backdrop:"static"
 			});
 			
 		});
-		//查出所有部门信息并显示在指定元素中
-		function getDepts(ele){
-			//清空之前下拉列表的值
-			$(ele).empty();
-			
-			$.ajax({
-				url:"${APP_PATH}/depts",
-				type:"GET",
-				success:function(result){
-					//{"code":100,"msg":"处理成功！","extend":{"depts":[{"dId":1,"dName":"研发部"},{"dId":2,"dName":"综合"},{"dId":3,"dName":"科教"},{"dId":4,"dName":"售后"},{"dId":5,"dName":"财务"},{"dId":6,"dName":"仓管"},{"dId":7,"dName":"车间"},{"dId":8,"dName":"科普"},{"dId":9,"dName":"企发"},{"dId":10,"dName":"实验室"},{"dId":11,"dName":"市场"},{"dId":12,"dName":"营销"}]}}
-					//console.log(result);
-					//显示部门信息在下拉列表中
-					//$("#dept_select").append("")
-					$.each(result.extend.depts,function(){
-						var optionEle = $("<option></option>").append(this.dName).attr("value",this.dName);
-						optionEle.appendTo(ele);
-					});
-					
-				}
-				
-			});
-		}
-		//查询所有组信息并显示在指定元素
-		function getTeams(ele){
-			
-			//清空之前下拉列表的值
-			$(ele).empty();
-			
-			$.ajax({
-				url:"${APP_PATH}/teams",
-				type:"GET",
-				success:function(result){
-					//console.log(result);
-					//显示小组信息在下拉列表中
-					//$("#team_select").append("")
-					$.each(result.extend.teams,function(){
-						var optionEle = $("<option></option>").append(this.tName).attr("value",this.tName);
-						optionEle.appendTo(ele);
-					});
-					
-				}
-				
-			});
-		}
+		
 		//校验表单数据
 		function validate_add_form(){
 			//1.拿到要校验的数据，使用正则表达式
-			var userName = $("#userName_add_input").val();
-			var regName = /^[\u2E80-\u9FFF]{2,5}$/;
+			//验证商品名
+			var goodsName = $("#name_add_input").val();
+			var regName = /^[\u2E80-\u9FFF]{2,20}$/;
 			
-			if(!regName.test(userName)){
-				// alert("用户名为2-5位中文"); 
-				
-				show_validate_msg("#userName_add_input","error","用户名为2-5位中文");
+			if(!regName.test(goodsName)){				
+				show_validate_msg("#name_add_input","error","商品名称为2-20位中文");
 				return false;
 			}else{
-				show_validate_msg("#userName_add_input","success","");
-				return true;						
+				show_validate_msg("#name_add_input","success","");
+									
 			}
+			//验证商品价格
+			var goodsPrice = $("#price_add_input").val();
+			var regPrice = /^([0-9]*)+(.[0-9]{1,2})?$/;
+			
+			if(!regPrice.test(goodsPrice)){				
+				show_validate_msg("#price_add_input","error","商品价格最多两位小数");
+				return false;
+			}else{
+				show_validate_msg("#price_add_input","success","");						
+			}
+			
+			
+			return true;
 						
 		}
 		//显示校验结果的提示信息
@@ -459,30 +445,32 @@
 			
 		}
 		
-		$("#userName_add_input").change(function(){
-			//1.发送ajax请求校验用户名是否可用
-			var userName = this.value;
+		$("#name_add_input").change(function(){
+			//1.发送ajax请求校验商品名称是否可用
+			var goodsName = this.value;
 			$.ajax({
-				url:"${APP_PATH}/checkuser",
+				url:"${APP_PATH}/checkgoods",
 				type:"POST",
-				data:"userName="+userName,
+				data:"goodsName="+goodsName,
 				success:function(result){
+					console.log(result.code);
 					if(result.code == 100){
-						show_validate_msg("#userName_add_input","success","用户名可用");
-						$("#user_save_btn").attr("ajax-va","success");
+						show_validate_msg("#name_add_input","success","用户名可用");
+						$("#goods_save_btn").attr("ajax-va","success");
 					}else{
-						show_validate_msg("#userName_add_input","error",result.extend.va_msg);
-						$("#user_save_btn").attr("ajax-va","error");
+						show_validate_msg("#name_add_input","error",result.extend.va_msg);
+						$("#goods_save_btn").attr("ajax-va","error");
 					}
 				}
 			});
-			
-			
 		});
-						
+		//商品价格验证
+		$("#price_add_input").change(function(){			
+			validate_add_form();
+		});
 		
 		//点击保存
-		$("#user_save_btn").click(function(){
+		$("#goods_save_btn").click(function(){
 			//1.模态框中填写的表单数据交给服务器进行保存
 			//2.先对要提交给服务器的数据进行校验
 			if(!validate_add_form()){
@@ -492,17 +480,20 @@
 			if($(this).attr("ajax-va")=="error"){
 				return false;
 			}
-			//4.发送ajax请求保存用户			
+			//4.发送ajax请求保存商品		
+			var formData = new FormData($("#addGoodsForm")[0]);
 			$.ajax({
-				url:"${APP_PATH}/user",
+				url:"${APP_PATH}/goods",
 				type:"POST",
-				data:$("#userAddModal form").serialize(),
+				data:formData,
+				processData: false,
+			    contentType: false,
 				success:function(result){
 					//alert(result.msg);
 					if(result.code == 100){
 						//保存成功：
 						//1.关闭模态框
-						$("#userAddModal").modal("hide");					
+						$("#goodsAddModal").modal("hide");					
 						//2.来到最后一页，显示刚插入信息
 						//发送ajax请求显示最后一页数据
 						to_page(totalRecord);
@@ -512,86 +503,127 @@
 						//有哪个字段的错误信息就显示哪个字段
 						if(undefined != result.extend.errorFields.name){
 							//显示员工名字错误信息
-							show_validate_msg("#userName_add_input","error",result.extend.errorFields.name);
+							show_validate_msg("#name_add_input","error",result.extend.errorFields.name);
 						}
-							
-					}
-					
-					
+						if(undefined != result.extend.errorFields.price){
+							//显示员工名字错误信息
+							show_validate_msg("#price_add_input","error",result.extend.errorFields.price);
+						}	
+					}										
 					
 				}
 			}) 
 			
 		});
-		//无法绑事件，按钮创建之前绑定click，所以绑定不上
-		//1.创建按钮的时候绑定事件；2.绑定.live()
-		//jquery新版无live，使用on替代
-		/* $(".edit_btn").click(function(){			
-		}); */
+		/* ----------------------------------修改-------------------------------- */
+		$("#price_update_input").change(function(){			
+			validate_add_form();
+		});
+		//编辑按钮事件
 		$(document).on("click",".edit_btn", function(){	
 			//alert("edit");			
-			//0.查出部门信息，并显示部门列表
-			getDepts("#dept_update_select");
-			getTeams("#team_update_select");
-			//1.查出用户信息，显示用户信息
-			getUser($(this).attr("edit-id"));	
 			
-			//2.把用户id传递给模态框更新按钮
-			$("#user_update_btn").attr("edit-id",$(this).attr("edit-id"));
+			//1.查出商品信息
+			getGoodsById($(this).attr("edit-id"));	
+			
+			//2.把商品id传递给模态框更新按钮
+			$("#goods_update_btn").attr("edit-id",$(this).attr("edit-id"));
 			
 			//弹出模态框
-			$("#userUpdateModal").modal({
+			$("#goodsUpdateModal").modal({
 				backdrop:"static"
 			});
 		});
-		
-		//查询用户信息
-		function getUser(id){
+		//查询商品信息
+		function getGoodsById(id){
 			$.ajax({
-				url:"${APP_PATH}/user/"+id,
+				url:"${APP_PATH}/goods/"+id,
 				type:"GET",
 				success:function(result){
 					console.log(result);
-					var userData = result.extend.user;
-					
-					$("#userName_update_static").text(userData.name);
-					$("#dept_update_select").val(userData.department);
-					$("#team_update_select").val(userData.team);
+					var goodsData = result.extend.goods;
+					$("#name_update_input").val(goodsData.name);					
+					$("#description_update_input").val(goodsData.description);
+					$("#price_update_input").val(goodsData.price);
+					$("#image_update_show").attr("src",goodsData.image).attr("style","width:100px;height:100px;")
+					$("#image_update_input").val(goodsData.file);
+					$("#number_update_input").val(goodsData.number);
 					
 				}
 				
 			});
 		}
-		//点击更新，更新用户信息
-		$("#user_update_btn").click(function(){
+		
+		//商品价格验证
+		$("#price_update_input").change(function(){			
+			var goodsPrice = $("#price_update_input").val();
+			var regPrice = /^([0-9]*)+(.[0-9]{1,2})?$/;
+			
+			if(!regPrice.test(goodsPrice)){				
+				show_validate_msg("#price_update_input","error","商品价格最多两位小数");
+				return false;
+			}else{
+				show_validate_msg("#price_update_input","success","");						
+			}
+		});
+		
+		//点击更新，更新商品信息
+		$("#goods_update_btn").click(function(){
+			
+			var formDataUpdate = new FormData($("#updateGoodsForm")[0]);
 			//1.验证格式
+			
+			
 			//2.发送ajax请求，保存用户数据
 			//type:"POST",
-			//data:$("#userUpdateModal form").serialize()+"&_method=PUT",
+			
 			$.ajax({
-				url:"${APP_PATH}/user/"+$(this).attr("edit-id"),
-				type:"PUT",
-				data:$("#userUpdateModal form").serialize(),
+				url:"${APP_PATH}/goods/"+$(this).attr("edit-id"),
+				type:"POST",
+				data:formDataUpdate,
+				contentType: false,  
+		        processData: false,
 				success:function(result){
-					//1.关闭模态框
-					$("#userUpdateModal").modal("hide");
-					//2.回到本页面
-					to_page(currentPage);
+					if(result.code == 100){
+						//保存成功：
+						//1.关闭模态框
+						$("#goodsUpdateModal").modal("hide");					
+						//2.来到最后一页，显示刚插入信息
+						//发送ajax请求显示最后一页数据
+						to_page(currentPage);
+					}else{
+						
+						if(undefined != result.extend.errorFields.price){
+							//显示错误信息
+							show_validate_msg("#price_update_input","error",result.extend.errorFields.price);
+						}	
+					}	
+
 				}				
 				
 			});
 		});
 		
-		//单个删除
+		//更新图像立即显示
+		$("#image_update_input").change(function(){
+			var $file = $(this);  
+			var objUrl = $file[0].files[0];
+			var windowURL = window.URL || window.webkitURL;
+			var dataURL;
+			dataURL = windowURL.createObjectURL(objUrl);
+			$("#image_update_show").attr("src",dataURL);			
+		});
+		
+		/* ----------------------------------删除-------------------------------- */
+		//删除商品
 		$(document).on("click",".delete_btn",function(){
 			//1.弹出是否删除对话框
-			//alert($(this).parents("tr").find("td:eq(1)").text());
-			var userName = $(this).parents("tr").find("td:eq(2)").text();
-			var userId = $(this).attr("del-id");
-			if(confirm("确认删除【"+userName+"】吗？")){
+			var goodsName = $(this).parents("tr").find("td:eq(1)").text();
+			var goodsId = $(this).attr("del-id");
+			if(confirm("确认删除【"+goodsName+"】吗？")){
 				//确认发送ajax请求删除即可
 				$.ajax({
-					url:"${APP_PATH}/user/"+userId,
+					url:"${APP_PATH}/goods/"+goodsId,
 					type:"DELETE",
 					success:function(result){
 						//alert(result.msg)
@@ -603,51 +635,129 @@
 			}
 		});
 		
-		//全选/全不选功能
-		$("#check_all").click(function(){
-			//attr获取checked是undefind，对于dom原生的属性，用prop获取值
-			//alert($(this).prop("checked"));
-			$(".check_item").prop("checked",$(this).prop("checked"));
+		/* ----------------------------------补货-------------------------------- */
+		//添加补货按钮事件
+		$("#goods_stock_modal_btn").click(function(){
+			//清除表单数据（表单完整重置：数据、样式）
+			reset_form("#stock_form");
+						
+			//发送ajax请求，从数据库查出列表信息，显示在下拉列表中
+			getGoods("#goods_stock_select");
 			
+			//弹出模态框
+			$("#stockModal").modal({
+				backdrop:"static"
+			});			
 		});
-		//check_item
-		$(document).on("click",".check_item",function(){
-			//判断当前选中元素是否为5个
-			var flag = $(".check_item:checked").length == $(".check_item").length;
-			$("#check_all").prop("checked",flag);
+		
+		
+		
+		//查询所有商品名
+		function getGoods(ele){
+			//清空之前下拉列表的值
+			$(ele).empty();
+			
+			$.ajax({
+				url:"${APP_PATH}/goodsnames",
+				type:"GET",
+				success:function(result){
+					//{"code":100,"msg":"处理成功！","extend":{"depts":[{"dId":1,"dName":"研发部"},{"dId":2,"dName":"综合"},{"dId":3,"dName":"科教"},{"dId":4,"dName":"售后"},{"dId":5,"dName":"财务"},{"dId":6,"dName":"仓管"},{"dId":7,"dName":"车间"},{"dId":8,"dName":"科普"},{"dId":9,"dName":"企发"},{"dId":10,"dName":"实验室"},{"dId":11,"dName":"市场"},{"dId":12,"dName":"营销"}]}}
+					//console.log(result);
+					//显示部门信息在下拉列表中
+					//$("#dept_select").append("")
+					$.each(result.extend.allgoods,function(){
+						var optionEle = $("<option></option>").append(this.name).attr("value",this.id);
+						optionEle.appendTo(ele);
+					});
+					
+				}
+				
+			});
+		}
+				
+		
+		//校验表单数据
+		function validate_stock_form(){
+			var stockPrice = $("#stock_price_input").val();
+			var regPrice = /^([0-9]*)+(.[0-9]{1,2})?$/;
+			
+			if(!regPrice.test(stockPrice)){		
+				show_validate_msg("#stock_price_input","error","价格最多两位小数");
+				return false;
+			}else{
+				show_validate_msg("#stock_price_input","success","");						
+			}
+			
+			var stockNum = $("#stock_num_input").val();
+			var regNum = /^[1-9]\d*$/;
+			
+			if(!regNum.test(stockNum)){				
+				show_validate_msg("#stock_num_input","error","数量为非零正整数");
+				return false;
+			}else{
+				show_validate_msg("#stock_num_input","success","");						
+			}
+			
+		}
+		$("#stock_price_input").change(function(){	
+			validate_stock_form();
+			showSum();
+		});
+		$("#stock_num_input").change(function(){			
+			validate_stock_form();
+			showSum();
+		});
+				
+		//总额
+		function showSum(){
+			if($("#stock_price_input").val() != null && $("#stock_num_input").val() != null){
+				$("#stock_sum_input").attr("value", $("#stock_price_input").val()*$("#stock_num_input").val());
+			}
+		}
+				
+		//保存补货单
+		$("#stock_save_btn").click(function(){
+			optionIndex = $("#goods_stock_select option:selected").index("option");
+			page = Math.ceil(optionIndex/perPageNum);
+			
+			//4.发送ajax请求保存		
+			$.ajax({
+				url:"${APP_PATH}/stock",
+				type:"POST",
+				data:$("#stock_form").serialize(),
+				success:function(result){
+					//alert(result.msg);
+					if(result.code == 100){
+						//保存成功：
+						//1.关闭模态框
+						$("#stockModal").modal("hide");					
+						//2.来到最后一页，显示刚插入信息
+						//发送ajax请求显示数据
+						
+						
+						to_page(page);
+					}else{
+						//显示失败信息
+						//console.log(result);
+						//有哪个字段的错误信息就显示哪个字段
+						if(undefined != result.extend.errorFields.stockPrice){
+							//显示错误信息
+							show_validate_msg("#stock_price_input","error",result.extend.errorFields.stockPrice);
+						}
+						if(undefined != result.extend.errorFields.stockNum){
+							//显示错误信息
+							show_validate_msg("#stock_num_input","error",result.extend.errorFields.stockNum);
+						}	
+					}										
+					
+				}
+			}) 
 			
 		});
 		
-		//点击全部删除，批量删除
-		$("#user_delete_all_btn").click(function(){
-			var userNames = "";
-			var del_idstr = "";
-			$.each($(".check_item:checked"),function(){
-				
-				userNames += $(this).parents("tr").find("td:eq(2)").text()+"，";
-				//组装员工id
-				del_idstr += $(this).parents("tr").find("td:eq(1)").text()+"-";
-				
-			});
-			//去除最后一个多余，-
-			userNames = userNames.substring(0, userNames.length-1);
-			del_idstr = del_idstr.substring(0, del_idstr.length-1);
-			
-			if(confirm("确认删除【"+userNames+"】吗？")){
-				//发送ajax请求
-				$.ajax({
-					url:"${APP_PATH}/user/"+del_idstr,
-					type:"DELETE",
-					success:function(result){
-						alert(result.msg);
-						//回到当前页面
-						to_page(currentPage);						
-					}
-					
-				});
-			}
-			
-		});
+		
+		
+		
 		
 		
 	</script>

@@ -35,21 +35,21 @@
 	      <div class="modal-body">
 	      	  <form class="form-horizontal">
 				  <div class="form-group">
-				    <label for="userName_add_input" class="col-sm-3 control-label ">用户名</label>
+				    <label for="userName_update_input" class="col-sm-3 control-label ">用户名</label>
 				    <div class="col-sm-6">
-				    	<p class="form-control-static" id="userName_update_static"></p>
-				      
+						    <input type="text" name="name" class="form-control" id="userName_update_input"  readonly="readonly">
+					       <span class="help-block"></span>   
 				    </div>
 				  </div>
 				  <div class="form-group">
-				    <label for="dept_add" class="col-sm-3 control-label">部门</label>
+				    <label for="dept_update_select" class="col-sm-3 control-label">部门</label>
 				    <div class="col-sm-6">
 				    	<select class="form-control" name="department" id="dept_update_select">
 						</select>
 				    </div>
 				  </div>
 				  <div class="form-group">
-					<label for="team_add" class="col-sm-3 control-label" >分组</label>
+					<label for="team_update_select" class="col-sm-3 control-label" >分组</label>
 				    <div class="col-sm-6">
 				    	<select class="form-control" name="team" id="team_update_select">
 						</select>
@@ -160,11 +160,11 @@
 		<!-- 显示分页信息 -->
 		<div class="row">
 			<!-- 分页文字信息 -->
-			<div class="col-md-6" id="page_info_area">
+			<div class="col-md-6" id="page_info_area1">
 				
 			</div>
 			<!-- 分页条信息 -->
-			<div class="col-md-6" id="page_nav_area">
+			<div class="col-md-6" id="page_nav_area1">
 				
 			</div>
 		</div>
@@ -174,15 +174,15 @@
 	
 	<script type="text/javascript">
 	
-		var totalRecord, currentPage;
+		var totalRecord1, currentPage1;
 	
 		//1.页面加载完成后，直接发送一个ajax请求，要到分页数据
 		$(function(){
-			to_page(1);
+			to_userpage(1);
 		});
 		
 		//跳转到相应页码的页面
-		function to_page(pn){
+		function to_userpage(pn){
 			$.ajax({
 				url:"${APP_PATH}/users",
 				data:"pn="+pn,
@@ -192,14 +192,16 @@
 					//1.解析并显示用户数据
 					build_users_table(result);
 					//2.解析并显示分页信息
-					build_page_info(result);
+					build_page_info1(result);
 					//3.解析显示分页条数据
-					build_page_nav(result);
+					build_page_nav1(result);
 					
 				}
 				
 			});
 		}
+		
+		/* ------------------------------------查询所有用户------------------------------- */
 		
 		//解析并显示用户数据
 		function build_users_table(result){
@@ -213,11 +215,11 @@
 				var userName = $("<td></td>").append(item.name);
 				var userDepartment = $("<td></td>").append(item.department);
 				var userTeam = $("<td></td>").append(item.team);
-				var editBtn = $("<button></button>").addClass("btn btn-xs edit_btn").append("编辑");
+				var editBtn = $("<button></button>").addClass("btn btn-xs user_edit_btn").append("编辑");
 				//为编辑按钮添加自定义属性，来表示当前用户的id
 				editBtn.attr("edit-id",item.id);
 				
-				var delBtn = $("<button></button>").addClass("btn btn-xs delete_btn").append("删除");
+				var delBtn = $("<button></button>").addClass("btn btn-xs user_delete_btn").append("删除");
 				delBtn.attr("del-id",item.id);
 				
 				var btn = $("<td></td>").append(editBtn).append(" ").append(delBtn);
@@ -232,19 +234,19 @@
 			});
 		}
 		//解析并显示分页信息
-		function build_page_info(result){
-			$("#page_info_area").empty();
+		function build_page_info1(result){
+			$("#page_info_area1").empty();
 			
-			$("#page_info_area").append("当前是第"
+			$("#page_info_area1").append("当前是第"
 					+result.extend.pageInfo.pageNum +"页，总计"
 					+result.extend.pageInfo.pages +"页，总计"
 					+result.extend.pageInfo.total +"条记录");
-			totalRecord = result.extend.pageInfo.total;
-			currentPage = result.extend.pageInfo.pageNum;
+			totalRecord1 = result.extend.pageInfo.total;
+			currentPage1 = result.extend.pageInfo.pageNum;
 		}
 		//解析并显示分页条
-		function build_page_nav(result){
-			$("#page_nav_area").empty();
+		function build_page_nav1(result){
+			$("#page_nav_area1").empty();
 			
 			var ul = $("<ul></ul>").addClass("pagination");
 			
@@ -259,10 +261,10 @@
 				prePageLi.addClass("disabled");
 			}else{
 				firstPageLi.click(function(){
-					to_page(1);
+					to_userpage(1);
 				});
 				prePageLi.click(function(){
-					to_page(result.extend.pageInfo.pageNum-1);
+					to_userpage(result.extend.pageInfo.pageNum-1);
 				});
 			}
 			//没有下一页，则后一页和末页不可用
@@ -271,10 +273,10 @@
 				lastPageLi.addClass("disabled");
 			}else{
 				nextPageLi.click(function(){
-					to_page(result.extend.pageInfo.pageNum+1);
+					to_userpage(result.extend.pageInfo.pageNum+1);
 				});
 				lastPageLi.click(function(){
-					to_page(result.extend.pageInfo.pages);
+					to_userpage(result.extend.pageInfo.pages);
 				});
 			}						
 			
@@ -288,7 +290,7 @@
 					numLi.addClass("active");
 				}
 				numLi.click(function(){
-					to_page(item);
+					to_userpage(item);
 				});
 				ul.append(numLi);
 			});
@@ -297,10 +299,10 @@
 			//ul加入nav元素
 			var navEle = $("<nav></nav>").append(ul);
 			//
-			navEle.appendTo("#page_nav_area");						
+			navEle.appendTo("#page_nav_area1");						
 		}
 		
-		function reset_form(ele){
+		function reset_form1(ele){
 			$(ele)[0].reset();
 			//清空表单样式
 			$(ele).find("*").removeClass("has-success has-error");
@@ -308,14 +310,15 @@
 			
 		}
 		
+		/* -----------------------------------------新增--------------------------------------- */
 		//点击新增按钮弹出模态框
 		$("#user_add_modal_btn").click(function(){
 			//清除表单数据（表单完整重置：数据、样式）
-			reset_form("#userAddModal form");
+			reset_form1("#userAddModal form");
 						
 			//发送ajax请求，从数据库查出列表信息，显示在下拉列表中
 			getDepts("#dept_add_select");
-			getTeams("#team_add_select")
+			getTeams("#team_add_select");
 			
 			//弹出模态框
 			$("#userAddModal").modal({
@@ -326,11 +329,13 @@
 		//查出所有部门信息并显示在指定元素中
 		function getDepts(ele){
 			//清空之前下拉列表的值
+
 			$(ele).empty();
 			
 			$.ajax({
 				url:"${APP_PATH}/depts",
 				type:"GET",
+				async : false,
 				success:function(result){
 					//{"code":100,"msg":"处理成功！","extend":{"depts":[{"dId":1,"dName":"研发部"},{"dId":2,"dName":"综合"},{"dId":3,"dName":"科教"},{"dId":4,"dName":"售后"},{"dId":5,"dName":"财务"},{"dId":6,"dName":"仓管"},{"dId":7,"dName":"车间"},{"dId":8,"dName":"科普"},{"dId":9,"dName":"企发"},{"dId":10,"dName":"实验室"},{"dId":11,"dName":"市场"},{"dId":12,"dName":"营销"}]}}
 					//console.log(result);
@@ -354,12 +359,13 @@
 			$.ajax({
 				url:"${APP_PATH}/teams",
 				type:"GET",
+				async : false,
 				success:function(result){
 					//console.log(result);
 					//显示小组信息在下拉列表中
 					//$("#team_select").append("")
 					$.each(result.extend.teams,function(){
-						var optionEle = $("<option></option>").append(this.tName).attr("value",this.tName);
+						var optionEle = $("<option></option>").append(this.tName).attr("value",this.tName);						
 						optionEle.appendTo(ele);
 					});
 					
@@ -368,7 +374,7 @@
 			});
 		}
 		//校验表单数据
-		function validate_add_form(){
+		function validate_add_form1(){
 			//1.拿到要校验的数据，使用正则表达式
 			var userName = $("#userName_add_input").val();
 			var regName = /^[\u2E80-\u9FFF]{2,5}$/;
@@ -427,7 +433,7 @@
 		$("#user_save_btn").click(function(){
 			//1.模态框中填写的表单数据交给服务器进行保存
 			//2.先对要提交给服务器的数据进行校验
-			if(!validate_add_form()){
+			if(!validate_add_form1()){
 				return false;
 			}
 			//3.判断用户名校验是否成功
@@ -447,7 +453,7 @@
 						$("#userAddModal").modal("hide");					
 						//2.来到最后一页，显示刚插入信息
 						//发送ajax请求显示最后一页数据
-						to_page(totalRecord);
+						to_userpage(totalRecord1);
 					}else{
 						//显示失败信息
 						//console.log(result);
@@ -455,28 +461,32 @@
 						if(undefined != result.extend.errorFields.name){
 							//显示员工名字错误信息
 							show_validate_msg("#userName_add_input","error",result.extend.errorFields.name);
-						}
-							
-					}
-					
-					
-					
+						}							
+					}					
 				}
 			}) 
 			
 		});
+		
+		
+		/* ----------------------------------------编辑------------------------------------------ */
 		//无法绑事件，按钮创建之前绑定click，所以绑定不上
 		//1.创建按钮的时候绑定事件；2.绑定.live()
 		//jquery新版无live，使用on替代
 		/* $(".edit_btn").click(function(){			
 		}); */
-		$(document).on("click",".edit_btn", function(){	
+		$(document).on("click",".user_edit_btn", function(){	
 			//alert("edit");			
 			//0.查出部门信息，并显示部门列表
 			getDepts("#dept_update_select");
+			
+			
 			getTeams("#team_update_select");
+			
+			
 			//1.查出用户信息，显示用户信息
-			getUser($(this).attr("edit-id"));	
+			getUser($(this).attr("edit-id"));
+			
 			
 			//2.把用户id传递给模态框更新按钮
 			$("#user_update_btn").attr("edit-id",$(this).attr("edit-id"));
@@ -489,17 +499,27 @@
 		
 		//查询用户信息
 		function getUser(id){
+			
 			$.ajax({
 				url:"${APP_PATH}/user/"+id,
 				type:"GET",
+				async : false,
 				success:function(result){
 					console.log(result);
 					var userData = result.extend.user;
+					//alert(userData.department+","+userData.team);
 					
-					$("#userName_update_static").text(userData.name);
-					$("#dept_update_select").val(userData.department);
+					$("#userName_update_input").val(userData.name);					
+					$("#userName_update_input").text(userData.name);
+					
+					//$("#dept_update_select").find("option:contains("+userData.department+")").attr("selected",true);
+					$("#dept_update_select").val(userData.department);					
+					//alert("部门："+$("#dept_update_select").val());
+					
+					//$("#team_update_select").find("option:contains("+userData.team+")").attr("selected",true);
 					$("#team_update_select").val(userData.team);
-					
+					//alert("小组："+$("#team_update_select").val());
+									
 				}
 				
 			});
@@ -518,14 +538,14 @@
 					//1.关闭模态框
 					$("#userUpdateModal").modal("hide");
 					//2.回到本页面
-					to_page(currentPage);
+					to_userpage(currentPage1);
 				}				
 				
 			});
 		});
 		
 		//单个删除
-		$(document).on("click",".delete_btn",function(){
+		$(document).on("click",".user_delete_btn",function(){
 			//1.弹出是否删除对话框
 			//alert($(this).parents("tr").find("td:eq(1)").text());
 			var userName = $(this).parents("tr").find("td:eq(2)").text();
@@ -538,7 +558,7 @@
 					success:function(result){
 						//alert(result.msg)
 						//1.回到本页面
-						to_page(currentPage);
+						to_userpage(currentPage1);
 					}
 				});
 
@@ -583,7 +603,7 @@
 					success:function(result){
 						alert(result.msg);
 						//回到当前页面
-						to_page(currentPage);						
+						to_userpage(currentPage1);						
 					}
 					
 				});

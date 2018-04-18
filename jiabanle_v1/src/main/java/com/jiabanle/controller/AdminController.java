@@ -39,11 +39,25 @@ public class AdminController {
 			mv.setViewName("home");			
 		}else{
 			//登录失败
-			mv.addObject("message","登录名和密码错误，请重新输入");
-			mv.setView(new RedirectView("./index.jsp"));
+			mv.addObject("msg","登录名和密码错误，请重新输入");
+			mv.setViewName("error");
 		}
 		return mv;
 		
+	}
+	
+	/**
+	 * 退出
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping("/logout")
+	public ModelAndView logout(ModelAndView mv,HttpSession session) {
+		if(session.getAttribute("admin")!=null){
+			session.removeAttribute("admin");
+		}
+		mv.setView(new RedirectView("./index.jsp"));
+		return mv;
 	}
 
 	

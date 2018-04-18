@@ -2,15 +2,19 @@ package com.jiabanle.bean;
 
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+
 public class Stock {
     private Integer id;
 
     private Date date;
-
+    
     private Integer goodsId;
-
+    
+    @NotNull(message="价格不能为空")
     private Double stockPrice;
-
+    
+    @NotNull(message="数量不能为空")
     private Integer stockNum;
 
     private Double sum;

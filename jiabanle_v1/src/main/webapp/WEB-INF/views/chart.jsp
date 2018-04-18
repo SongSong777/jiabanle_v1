@@ -12,7 +12,7 @@
 </head>
 <body>
 	<div>
-		
+		${sessionScope.admin.username}
 	</div>
 	
 	chart

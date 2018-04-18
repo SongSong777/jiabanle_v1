@@ -33,12 +33,16 @@
         <div class="navbar-header">
             <a href="#" class="navbar-brand">加班乐后台管理系统</a>
         </div>
+        <div class="navbar-admin" style="float:right">
+            <a href="#" class="navbar-brand">Admin:${sessionScope.admin.username}</a>
+			<a href="${APP_PATH}/logout" class="navbar-brand">退出</a>
+        </div>
     </div>
     <div role="navigation">
     	<ul class="nav nav-tabs" id="myTabs">
 			<li role="presentation" class="active"><a href="#">首页</a></li>
-			<li role="presentation"><a href="#">账单管理</a></li>
-			<li role="presentation"><a href="#">消费管理</a></li>
+			<li role="presentation"><a href="#">账单查询</a></li>
+			<li role="presentation"><a href="#">消费查询</a></li>
 			<li role="presentation"><a href="#">用户管理</a></li>
 			<li role="presentation"><a href="#">商品管理</a></li>
 		</ul>
@@ -63,6 +67,7 @@
 		</div>
 		
 		<div style="display: none">
+			<%@ include file="goods.jsp" %>
 			
 		</div>
 

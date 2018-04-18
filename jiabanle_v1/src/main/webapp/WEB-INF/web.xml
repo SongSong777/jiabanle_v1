@@ -43,6 +43,21 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
   
+
+  <!--form表单中存在文件时,该过滤器可以处理http请求中的文件,被该过滤器过滤后会用post方法提交,form表单需设为enctype="multipart/form-data"-->
+  <filter>
+        <filter-name>multipartFilter</filter-name>
+        <filter-class>org.springframework.web.multipart.support.MultipartFilter</filter-class>
+        <init-param>
+            <param-name>multipartResolverBeanName</param-name>
+            <param-value>multipartResolver</param-value>
+        </init-param>
+    </filter>
+ <filter-mapping>
+        <filter-name>multipartFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping> 
+  
   <!-- 4.rest风格uri -->
   <filter>
     <filter-name>HiddenHttpMethodFilter</filter-name>
@@ -62,6 +77,8 @@
   	<filter-name>HttpPutFormContentFilter</filter-name>
   	<url-pattern>/*</url-pattern> 
   </filter-mapping>
+  
+
   
   <session-config>
   	<session-timeout>30</session-timeout>  	

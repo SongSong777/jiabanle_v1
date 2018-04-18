@@ -3,6 +3,8 @@ package com.jiabanle.bean;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class Goods {
     private Integer id;
     
@@ -16,9 +18,19 @@ public class Goods {
 
     private String image;
 
-    private Short number;
+    private Integer number;
+    
+    private MultipartFile file;
+    
+    
 
-    public Integer getId() {
+    @Override
+	public String toString() {
+		return "Goods [id=" + id + ", name=" + name + ", description=" + description + ", price=" + price + ", image="
+				+ image + ", number=" + number + ", file=" + file + "]";
+	}
+
+	public Integer getId() {
         return id;
     }
 
@@ -58,11 +70,19 @@ public class Goods {
         this.image = image == null ? null : image.trim();
     }
 
-    public Short getNumber() {
+    public Integer getNumber() {
         return number;
     }
 
-    public void setNumber(Short number) {
+    public void setNumber(Integer number) {
         this.number = number;
     }
+
+	public MultipartFile getFile() {
+		return file;
+	}
+
+	public void setFile(MultipartFile file) {
+		this.file = file;
+	}
 }

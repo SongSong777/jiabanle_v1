@@ -98,7 +98,9 @@ public class UserController {
 	@RequestMapping(value="/user/{id}",method=RequestMethod.GET)
 	@ResponseBody
 	public Msg getUser(@PathVariable("id")Integer id){ 
+		System.out.println(id);
 		User user = userService.getUser(id);
+		System.out.println(user);
 		return Msg.success().add("user", user);
 		
 	}
@@ -155,9 +157,9 @@ public class UserController {
 	@RequestMapping("/users")
 	@ResponseBody
 	public Msg getUsersWithJson(@RequestParam(value="pn",defaultValue="1")Integer pn) {
-		PageHelper.startPage(pn, 5);
+		PageHelper.startPage(pn, 10);
 		List<User> users = userService.getAll();
-		PageInfo page = new PageInfo(users,5);
+		PageInfo page = new PageInfo(users,5);//导航页显示数
 		return Msg.success().add("pageInfo",page);		
 	}
 	

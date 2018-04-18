@@ -24,7 +24,12 @@ public class GoodsService {
 	public List<Goods> getAll() {						
 		return goodsMapper.selectByExample(null);
 	}
-
+	
+	/**
+	 * 检验商品名
+	 * @param goodsName
+	 * @return
+	 */
 	public boolean checkGoods(String goodsName) {
 		GoodsExample example = new GoodsExample();
 		Criteria criteria = example.createCriteria();
@@ -32,9 +37,31 @@ public class GoodsService {
 		long count = goodsMapper.countByExample(example);
 		return count==0 ;
 	}
-
+	/**
+	 * 保存新增商品
+	 * @param goods
+	 */
 	public void insertGoods(@Valid Goods goods) {
 		goodsMapper.insertSelective(goods);
+		
+	}
+	/**
+	 * 根据id获取商品
+	 * @param id
+	 * @return
+	 */
+	public Goods getGoods(Integer id) {
+		Goods goods = goodsMapper.selectByPrimaryKey(id);
+		return goods;
+	}
+
+	public void updateGoods(Goods goods) {
+		goodsMapper.updateByPrimaryKey(goods);
+		
+	}
+
+	public void deleteGoods(Integer id) {
+		goodsMapper.deleteByPrimaryKey(id);
 		
 	}
 	

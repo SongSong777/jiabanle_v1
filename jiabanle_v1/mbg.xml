@@ -45,6 +45,6 @@
     </javaClientGenerator>
 
 	<!-- table指定每个表的生成策略 -->
-    <table tableName="goods" domainObjectName="Goods" ></table>
+    <table tableName="order_items" domainObjectName="OrderItems" ></table>
   </context>
 </generatorConfiguration>

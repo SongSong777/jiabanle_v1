@@ -1,5 +1,7 @@
 package com.jiabanle.bean;
 
+import java.util.List;
+
 import javax.validation.constraints.Pattern;
 
 public class User {
@@ -12,7 +14,9 @@ public class User {
 
     private String department;
 
-    private String team;   
+    private String team; 
+    
+    private List<Order> orders;
     
     
     public User() {
@@ -78,5 +82,17 @@ public class User {
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", password=" + password + ", department=" + department + ", team="
 				+ team + "]";
+	}
+
+
+
+	public List<Order> getOrders() {
+		return orders;
+	}
+
+
+
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
 	}
 }

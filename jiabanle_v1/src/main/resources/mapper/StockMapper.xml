@@ -3,7 +3,7 @@
 <mapper namespace="com.jiabanle.dao.StockMapper">
   <resultMap id="BaseResultMap" type="com.jiabanle.bean.Stock">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="date" jdbcType="DATE" property="date" />
+    <result column="date" jdbcType="TIMESTAMP" property="date" />
     <result column="goods_id" jdbcType="INTEGER" property="goodsId" />
     <result column="stock_price" jdbcType="DOUBLE" property="stockPrice" />
     <result column="stock_num" jdbcType="INTEGER" property="stockNum" />
@@ -104,7 +104,7 @@
     insert into stock (id, date, goods_id, 
       stock_price, stock_num, sum
       )
-    values (#{id,jdbcType=INTEGER}, #{date,jdbcType=DATE}, #{goodsId,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=INTEGER}, #{date,jdbcType=TIMESTAMP}, #{goodsId,jdbcType=INTEGER}, 
       #{stockPrice,jdbcType=DOUBLE}, #{stockNum,jdbcType=INTEGER}, #{sum,jdbcType=DOUBLE}
       )
   </insert>
@@ -135,7 +135,7 @@
         #{id,jdbcType=INTEGER},
       </if>
       <if test="date != null">
-        #{date,jdbcType=DATE},
+        #{date,jdbcType=TIMESTAMP},
       </if>
       <if test="goodsId != null">
         #{goodsId,jdbcType=INTEGER},
@@ -164,7 +164,7 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.date != null">
-        date = #{record.date,jdbcType=DATE},
+        date = #{record.date,jdbcType=TIMESTAMP},
       </if>
       <if test="record.goodsId != null">
         goods_id = #{record.goodsId,jdbcType=INTEGER},
@@ -186,7 +186,7 @@
   <update id="updateByExample" parameterType="map">
     update stock
     set id = #{record.id,jdbcType=INTEGER},
-      date = #{record.date,jdbcType=DATE},
+      date = #{record.date,jdbcType=TIMESTAMP},
       goods_id = #{record.goodsId,jdbcType=INTEGER},
       stock_price = #{record.stockPrice,jdbcType=DOUBLE},
       stock_num = #{record.stockNum,jdbcType=INTEGER},
@@ -199,7 +199,7 @@
     update stock
     <set>
       <if test="date != null">
-        date = #{date,jdbcType=DATE},
+        date = #{date,jdbcType=TIMESTAMP},
       </if>
       <if test="goodsId != null">
         goods_id = #{goodsId,jdbcType=INTEGER},
@@ -218,7 +218,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jiabanle.bean.Stock">
     update stock
-    set date = #{date,jdbcType=DATE},
+    set date = #{date,jdbcType=TIMESTAMP},
       goods_id = #{goodsId,jdbcType=INTEGER},
       stock_price = #{stockPrice,jdbcType=DOUBLE},
       stock_num = #{stockNum,jdbcType=INTEGER},
