@@ -188,6 +188,7 @@
 				data:"pn="+pn,
 				type:"GET",
 				success:function(result){
+					
 					//console.log(result);
 					//1.解析并显示用户数据
 					build_users_table(result);
@@ -498,8 +499,7 @@
 		});
 		
 		//查询用户信息
-		function getUser(id){
-			
+		function getUser(id){			
 			$.ajax({
 				url:"${APP_PATH}/user/"+id,
 				type:"GET",

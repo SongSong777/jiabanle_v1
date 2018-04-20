@@ -7,6 +7,20 @@
     <result column="sum" jdbcType="DOUBLE" property="sum" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
   </resultMap>
+  
+  <resultMap id="WithUserResultMap" type="com.jiabanle.bean.Order">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="date" jdbcType="TIMESTAMP" property="date" />
+    <result column="sum" jdbcType="DOUBLE" property="sum" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />   
+    <association property="user" javaType="com.jiabanle.bean.User">
+    	<id column="uid" jdbcType="INTEGER" property="id" />
+    	<result column="name" jdbcType="VARCHAR" property="name" />
+    	<result column="department" jdbcType="VARCHAR" property="department" />
+    	<result column="team" jdbcType="VARCHAR" property="team" />
+    </association>    
+  </resultMap>
+  
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -68,13 +82,43 @@
   <sql id="Base_Column_List">
     id, date, sum, user_id
   </sql>
+  <sql id="WithUser_Column_List">
+  	o.id, o.date, o.sum, o.user_id, u.id uid, u.name, u.department, u.team 	
+  </sql>
+  
+  <select id="selectByPrimaryKeyWithUser" parameterType="java.lang.Integer" resultMap="WithUserResultMap">
+    select 
+    <include refid="WithUser_Column_List" />
+    from t_order o
+    left join user u on o.user_id=u.id
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByExampleWithUser" parameterType="com.jiabanle.bean.OrderExample" resultMap="WithUserResultMap">
+  	select
+	    <if test="distinct">
+	      distinct
+	    </if>
+	    <include refid="WithUser_Column_List" />
+    from t_order o
+	left join user u on o.user_id=u.id
+	    <if test="_parameter != null">
+	      <include refid="Example_Where_Clause" />
+	    </if>
+	    <if test="orderByClause != null">
+	      order by ${orderByClause}
+	    </if>  	        
+  </select>
+  
+
+  
   <select id="selectByExample" parameterType="com.jiabanle.bean.OrderExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from order
+    from t_order
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -85,27 +129,27 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from order
+    from t_order
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from order
+    delete from t_order
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.jiabanle.bean.OrderExample">
-    delete from order
+    delete from t_order
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.jiabanle.bean.Order">
-    insert into order (id, date, sum, 
+    insert into t_order (id, date, sum, 
       user_id)
     values (#{id,jdbcType=INTEGER}, #{date,jdbcType=TIMESTAMP}, #{sum,jdbcType=DOUBLE}, 
       #{userId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.jiabanle.bean.Order">
-    insert into order
+    insert into t_order
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -136,13 +180,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jiabanle.bean.OrderExample" resultType="java.lang.Long">
-    select count(*) from order
+    select count(*) from t_order
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update order
+    update t_order
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
@@ -162,7 +206,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update order
+    update t_order
     set id = #{record.id,jdbcType=INTEGER},
       date = #{record.date,jdbcType=TIMESTAMP},
       sum = #{record.sum,jdbcType=DOUBLE},
@@ -172,7 +216,7 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.jiabanle.bean.Order">
-    update order
+    update t_order
     <set>
       <if test="date != null">
         date = #{date,jdbcType=TIMESTAMP},
@@ -187,7 +231,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jiabanle.bean.Order">
-    update order
+    update t_order
     set date = #{date,jdbcType=TIMESTAMP},
       sum = #{sum,jdbcType=DOUBLE},
       user_id = #{userId,jdbcType=INTEGER}

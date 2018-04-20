@@ -12,8 +12,15 @@ public class Order {
     private Integer userId;
     
     private User user;
+    
+    
 
-    public Integer getId() {
+    @Override
+	public String toString() {
+		return "Order [id=" + id + ", date=" + date + ", sum=" + sum + ", userId=" + userId + ", user=" + user + "]";
+	}
+
+	public Integer getId() {
         return id;
     }
 
@@ -52,10 +59,4 @@ public class Order {
 	public void setUser(User user) {
 		this.user = user;
 	}
-
-	@Override
-	public String toString() {
-		return "Order [id=" + id + ", date=" + date + ", sum=" + sum + ", userId=" + userId + ", user=" + user + "]";
-	}
-	
 }

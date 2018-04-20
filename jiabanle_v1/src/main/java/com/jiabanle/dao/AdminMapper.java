@@ -2,7 +2,6 @@ package com.jiabanle.dao;
 
 import com.jiabanle.bean.Admin;
 import com.jiabanle.bean.AdminExample;
-import com.jiabanle.bean.User;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Param;

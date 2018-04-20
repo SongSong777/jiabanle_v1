@@ -3,6 +3,8 @@ package com.jiabanle.dao;
 import com.jiabanle.bean.Order;
 import com.jiabanle.bean.OrderExample;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface OrderMapper {
@@ -27,4 +29,11 @@ public interface OrderMapper {
     int updateByPrimaryKeySelective(Order record);
 
     int updateByPrimaryKey(Order record);
+    
+    //根据条件查询带User的Order
+    List<Order> selectByExampleWithUser(OrderExample example);
+    //根据id查询带User的Order
+    Order selectByPrimaryKeyWithUser(Integer id);
+    
+   
 }

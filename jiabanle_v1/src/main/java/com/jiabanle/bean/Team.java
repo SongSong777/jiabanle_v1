@@ -1,11 +1,15 @@
 package com.jiabanle.bean;
 
+import java.util.List;
+
 public class Team {
     private Short tId;
 
     private String tName;
 
     private Short dId;
+    
+    private List<User> users;
 
     public Short gettId() {
         return tId;
@@ -30,4 +34,12 @@ public class Team {
     public void setdId(Short dId) {
         this.dId = dId;
     }
+
+	public List<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<User> users) {
+		this.users = users;
+	}
 }

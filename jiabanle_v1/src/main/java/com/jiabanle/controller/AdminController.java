@@ -17,7 +17,6 @@ import com.jiabanle.service.AdminService;
  * @author swf19
  */
 @Controller
-
 public class AdminController {
 	@Autowired
 	AdminService adminService;

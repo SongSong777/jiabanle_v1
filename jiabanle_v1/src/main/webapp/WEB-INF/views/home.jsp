@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>用户列表</title>
+<title>加班乐后台管理系统</title>
 <%
 	pageContext.setAttribute("APP_PATH",request.getContextPath());
 

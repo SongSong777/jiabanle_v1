@@ -1,5 +1,7 @@
 package com.jiabanle.bean;
 
+import java.util.List;
+
 public class OrderItems {
     private Long id;
 
@@ -10,6 +12,8 @@ public class OrderItems {
     private Double discountPrice;
 
     private Integer num;
+    
+    private List<Goods> goods;
 
     public Long getId() {
         return id;
@@ -50,4 +54,12 @@ public class OrderItems {
     public void setNum(Integer num) {
         this.num = num;
     }
+
+	public List<Goods> getGoods() {
+		return goods;
+	}
+
+	public void setGoods(List<Goods> goods) {
+		this.goods = goods;
+	}
 }

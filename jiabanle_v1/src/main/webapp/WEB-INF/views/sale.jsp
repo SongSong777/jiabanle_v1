@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>消费查询页面</title>
+<title>消费查询</title>
 </head>
 <body>
 	<!-- 搭建显示页面 -->
@@ -18,12 +18,35 @@
 		</div>	
 		<!-- 按钮 -->
 		<div class="row">			
-			<form class="form-inline col-md-4 col-md-offset-8" id="get_bills_form" action="${APP_PATH}/sales" method="post" >
+			<form class="form-inline col-md-9 col-md-offset-3" id="get_sales_form" >
 			  <div class="form-group">
-			    <label for="bill_date_select" >账单日期</label>	
-				<select class="form-control" name="billDate" id="bill_date_select"></select>
+			    <label for="bill_date_select" >订单日期</label>	
+				<select class="form-control" name="saleDate" id="sale_date_select">
+					<option value="0000-00">所有日期</option>
+				</select>
 			  </div>
-			  <button type="submit" class="btn btn-primary" id="bill_get_btn">查询</button>
+			  <div class="form-group">
+			    <label for="sale_time_select" >订单时间段</label>	
+				<select class="form-control" name="saleTime" id="sale_time_select">
+					<option value="0">所有时间</option>
+					<option value="1">法定节假</option>
+					<option value="2">晚6时后</option>
+					<option value="3">其他时间</option>										
+				</select>
+			  </div>
+			  <div class="form-group">
+			    <label for="sale_dept_select" >部门</label>	
+				<select class="form-control" name="saleDept" id="sale_dept_select">
+					<option value="0">所有部门</option>
+				</select>
+			  </div>			  
+			  <div class="form-group">
+			    <label for="sale_team_select" >小组</label>	
+				<select class="form-control" name="saleTeam" id="sale_team_select">
+					<option value="0">所有小组</option>
+				</select>
+			  </div>
+			  <button type="button" class="btn btn-primary" id="sale_get_btn">查询</button>
 			</form>
 		</div>
 		<!-- 显示表格数据 -->
@@ -33,9 +56,11 @@
 					<thead>
 						<tr>						
 							<th>编号</th>
-							<th>部门</th>
-							<th>组别</th>
+							<th>消费日期</th>
+							<th>消费总额</th>
 							<th>员工姓名</th>
+							<th>部门</th>
+							<th>组别</th>					
 							<th>详情</th>					
 						</tr>
 					</thead>
@@ -63,7 +88,7 @@
 	
 	<script type="text/javascript">
 		
-		/* -------------------------------------------查询表单----------------------------------- */
+		/* -------------------------------------------日期----------------------------------- */
 		 var last_year_month = function() {  
 	         var d = new Date();
 	         //alert(d);
@@ -86,16 +111,240 @@
 	         //生成前12个月日期下拉框  
 	         $.each(allinfo,function(i){
 	        	 var m = $("<option></option>").append(allinfo[i]).attr("value",allinfo[i]);
-	        	 m.appendTo("#bill_date_select");
+	        	 m.appendTo("#sale_date_select");
 	        	 //$("#bill_date_select").append("<option></option>").append(allinfo[i]).attr("value",allinfo[i]);
              });
 	         
+	         
+	         getOrderDepts("#sale_dept_select");
+	         getOrderTeams("#sale_team_select")
+	         
 	     }); 
 	     
-	     /* -------------------------------------------查询表单----------------------------------- */
+			//查出所有部门信息并显示在指定元素中
+			function getOrderDepts(ele){
+				$.ajax({
+					url:"${APP_PATH}/depts",
+					type:"GET",
+					async : false,
+					success:function(result){
+						//{"code":100,"msg":"处理成功！","extend":{"depts":[{"dId":1,"dName":"研发部"},{"dId":2,"dName":"综合"},{"dId":3,"dName":"科教"},{"dId":4,"dName":"售后"},{"dId":5,"dName":"财务"},{"dId":6,"dName":"仓管"},{"dId":7,"dName":"车间"},{"dId":8,"dName":"科普"},{"dId":9,"dName":"企发"},{"dId":10,"dName":"实验室"},{"dId":11,"dName":"市场"},{"dId":12,"dName":"营销"}]}}
+						//console.log(result);
+						//显示部门信息在下拉列表中
+						//$("#dept_select").append("")
+						$.each(result.extend.depts,function(){
+							var optionEle = $("<option></option>").append(this.dName).attr("value",this.dName);
+							optionEle.appendTo(ele);
+						});
+						
+					}
+					
+				});
+			}
+			//查询所有组信息并显示在指定元素
+			function getOrderTeams(ele){				
+				$.ajax({
+					url:"${APP_PATH}/teams",
+					type:"GET",
+					async : false,
+					success:function(result){
+						//console.log(result);
+						//显示小组信息在下拉列表中
+						//$("#team_select").append("")
+						$.each(result.extend.teams,function(){
+							var optionEle = $("<option></option>").append(this.tName).attr("value",this.tName);						
+							optionEle.appendTo(ele);
+						});
+						
+					}
+					
+				});
+			}
 	     
-	
-	
+	     
+	     /* -------------------------------------------全部查询----------------------------------- */
+	     //1.页面加载完成后，直接发送一个ajax请求，要到分页数据
+		$(function(){
+			to_salepage(1);
+		});
+		
+		//跳转到相应页码的页面
+		function to_salepage(pn){
+			var data = $.param({"pn":pn})+"&"+$("#get_sales_form").serialize();
+			console.log(data);
+			$.ajax({
+				url:"${APP_PATH}/sales",
+				data:data,
+				type:"GET",
+				dateType:"json",
+				success:function(result){
+					console.log(result);
+					//1.解析并显示用户数据
+					build_sale_table(result);
+					//2.解析并显示分页信息
+					build_sale_page_info(result);
+					//3.解析显示分页条数据
+					build_sale_page_nav(result);					
+				}				
+			});
+		}
+		
+		//时间戳转格式
+		function unixToDate(unixTime){
+			var unixTimeInt = parseInt(unixTime);
+			var time = new Date(unixTimeInt);
+			var ymdhis ="";
+			var years = time.getFullYear();
+            var months = time.getMonth()+1;
+            var days = time.getDate();
+            if(months < 10){
+            	months = "0"+months;               
+            }
+            if(days < 10){
+            	days = "0"+days;
+            }
+            
+			ymdhis += years + "-";
+            ymdhis += months + "-";
+            ymdhis += days;
+            
+            var hours = time.getHours();
+            var minutes = time.getMinutes();
+            var seconds = time.getSeconds();
+            if(hours < 10){
+                hours = "0"+hours;               
+            }
+            if(minutes < 10){
+                minutes = "0"+minutes;
+            }
+            if(seconds < 10){
+                seconds = "0"+seconds;
+            }
+            ymdhis += " " + hours + ":";
+            ymdhis += minutes + ":";
+            ymdhis += seconds;            
+            return ymdhis;			
+		}
+		
+		//金额转格式
+		function numToMoney(value){
+			var value = Math.round(parseFloat(value)*100)/100;
+			var xsd = value.toString().split(".");
+			if(xsd.length == 1){
+			  value = value.toString()+".00";
+			  return value;
+			}
+			if(xsd.length > 1){
+			  if(xsd[1].length<2){
+			  value = value.toString()+"0";
+			}
+			  return value;
+			}
+			
+		}
+		
+		
+		
+	    //解析并显示用户数据
+		function build_sale_table(result){
+			//ajax无刷新，要先清空
+			$("#sales_table tbody").empty();
+			
+			var sales = result.extend.pageInfo.list;
+			$.each(sales,function(index,item){
+				var saleId = $("<td></td>").append(item.id);				
+				var saleDate = $("<td></td>").append(unixToDate(item.date));
+				var saleSum = $("<td></td>").append(numToMoney(item.sum));
+				var userName = $("<td></td>").append(item.user.name);
+				var userDepartment = $("<td></td>").append(item.user.department);
+				var userTeam = $("<td></td>").append(item.user.team);
+				var detailsBtn = $("<button></button>").addClass("btn btn-xs user_edit_btn").append("详情");
+				//为编辑按钮添加自定义属性，来表示当前订单的id
+				detailsBtn.attr("details-id",item.id);				
+				var btn = $("<td></td>").append(detailsBtn);
+				//append方法执行完成以后还是返回原来的元素
+				$("<tr></tr>").append(saleId)
+					.append(saleDate)
+					.append(saleSum)					
+					.append(userName)
+					.append(userDepartment)
+					.append(userTeam)
+					.append(btn)
+					.appendTo("#sales_table tbody");
+			});
+		}
+		 
+		//解析并显示分页信息
+		function build_sale_page_info(result){
+			$("#sales_page_info_area").empty();
+			
+			$("#sales_page_info_area").append("当前是第"
+					+result.extend.pageInfo.pageNum +"页，总计"
+					+result.extend.pageInfo.pages +"页，总计"
+					+result.extend.pageInfo.total +"条记录");
+		}
+		//解析并显示分页条
+		function build_sale_page_nav(result){
+			$("#sales_page_nav_area").empty();
+			
+			var ul = $("<ul></ul>").addClass("pagination");
+			
+			var firstPageLi = $("<li></li>").append($("<a></a>").append("首页").attr("href", "#"));
+			var lastPageLi = $("<li></li>").append($("<a></a>").append("末页").attr("href", "#"));
+			
+			var prePageLi = $("<li></li>").append($("<a></a>").append("&laquo;").attr("href", "#"));			
+			var nextPageLi = $("<li></li>").append($("<a></a>").append("&raquo;").attr("href", "#"));
+			//没有上一页，则前一页和首页不可用
+			if(result.extend.pageInfo.hasPreviousPage == false){
+				firstPageLi.addClass("disabled");
+				prePageLi.addClass("disabled");
+			}else{
+				firstPageLi.click(function(){
+					to_salepage(1);
+				});
+				prePageLi.click(function(){
+					to_salepage(result.extend.pageInfo.pageNum-1);
+				});
+			}
+			//没有下一页，则后一页和末页不可用
+			if(result.extend.pageInfo.hasNextPage == false){
+				nextPageLi.addClass("disabled");
+				lastPageLi.addClass("disabled");
+			}else{
+				nextPageLi.click(function(){
+					to_salepage(result.extend.pageInfo.pageNum+1);
+				});
+				lastPageLi.click(function(){
+					to_salepage(result.extend.pageInfo.pages);
+				});
+			}						
+			//添加首页和前一页
+			ul.append(firstPageLi).append(prePageLi);			
+			//遍历并添加页码
+			$.each(result.extend.pageInfo.navigatepageNums,function(index,item){
+				
+				var numLi = $("<li></li>").append($("<a></a>").append(item));
+				if(result.extend.pageInfo.pageNum == item){
+					numLi.addClass("active");
+				}
+				numLi.click(function(){
+					to_salepage(item);
+				});
+				ul.append(numLi);
+			});
+			//添加下一页和末页
+			ul.append(nextPageLi).append(lastPageLi);
+			//ul加入nav元素
+			var navEle = $("<nav></nav>").append(ul);
+			//
+			navEle.appendTo("#sales_page_nav_area");						
+		}
+		
+		//条件查询
+		$("#sale_get_btn").click(function(){
+			to_salepage(1);
+		});
+
 	
 	</script>
 
