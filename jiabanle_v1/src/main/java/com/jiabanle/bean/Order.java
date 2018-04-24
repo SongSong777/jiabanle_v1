@@ -1,6 +1,7 @@
 package com.jiabanle.bean;
 
 import java.util.Date;
+import java.util.List;
 
 public class Order {
     private Integer id;
@@ -12,6 +13,8 @@ public class Order {
     private Integer userId;
     
     private User user;
+    
+    private List<OrderItems> OrderItems;
     
     
 
@@ -58,5 +61,13 @@ public class Order {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public List<OrderItems> getOrderItems() {
+		return OrderItems;
+	}
+
+	public void setOrderItems(List<OrderItems> orderItems) {
+		OrderItems = orderItems;
 	}
 }

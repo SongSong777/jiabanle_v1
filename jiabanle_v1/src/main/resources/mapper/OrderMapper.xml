@@ -110,7 +110,34 @@
 	    </if>  	        
   </select>
   
+  <select id="selectByDTWithUser" parameterType="map" resultMap="WithUserResultMap">
+  	select 
+    <include refid="WithUser_Column_List" />
+    from t_order o
+    left join user u on o.user_id=u.id
+    where 1=1 
+    <if test="date != null">
+    and DATE_FORMAT(o.date,'%Y-%m')=#{date,jdbcType=VARCHAR}
+    </if>
+    
+    <if test="time1 != null">
+    and EXISTS (SELECT 1 from restdate r where DATE_FORMAT(o.date,'%Y-%m-%d')= r.rest_date)
+    </if>
+    
+    <if test="time2 != null">
+    and (DATE_FORMAT(o.date,'%T') &gt;= '18:00:00' OR DATE_FORMAT(o.date,'%T') &lt; '07:00:00')
+    </if>
+    
+    <if test="department != null">
+    and u.department = #{department,jdbcType=VARCHAR}
+    </if>
 
+    <if test="team != null">
+    and u.team = #{team,jdbcType=VARCHAR}
+    </if>
+    order by o.id desc
+       
+  </select>
   
   <select id="selectByExample" parameterType="com.jiabanle.bean.OrderExample" resultMap="BaseResultMap">
     select

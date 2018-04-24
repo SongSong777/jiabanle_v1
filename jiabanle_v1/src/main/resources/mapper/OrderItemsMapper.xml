@@ -8,6 +8,22 @@
     <result column="discount_price" jdbcType="DOUBLE" property="discountPrice" />
     <result column="num" jdbcType="INTEGER" property="num" />
   </resultMap>
+    <resultMap id="WithGoodsResultMap" type="com.jiabanle.bean.OrderItems">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="goods_id" jdbcType="INTEGER" property="goodsId" />
+    <result column="discount_price" jdbcType="DOUBLE" property="discountPrice" />
+    <result column="num" jdbcType="INTEGER" property="num" />
+    <association property="goods" javaType="com.jiabanle.bean.Goods">
+      <id column="id" jdbcType="INTEGER" property="id" />
+      <result column="name" jdbcType="VARCHAR" property="name" />
+      <result column="description" jdbcType="VARCHAR" property="description" />
+      <result column="price" jdbcType="DOUBLE" property="price" />
+      <result column="image" jdbcType="VARCHAR" property="image" />
+      <result column="number" jdbcType="INTEGER" property="number" />   
+    </association>
+  </resultMap>
+  
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -69,6 +85,15 @@
   <sql id="Base_Column_List">
     id, order_id, goods_id, discount_price, num
   </sql>
+  
+  <select id="selectItemsWithGoodsByOrderId" resultMap="WithGoodsResultMap" parameterType="java.lang.Integer">
+    select i.order_id, g.name, g.price, i.discount_price, i.num
+    from order_items i
+	left join goods g on i.goods_id=g.id
+	where i.order_id = #{oid,jdbcType=INTEGER}
+  
+  </select>
+  
   <select id="selectByExample" parameterType="com.jiabanle.bean.OrderItemsExample" resultMap="BaseResultMap">
     select
     <if test="distinct">

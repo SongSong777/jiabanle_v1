@@ -55,6 +55,7 @@ public class GoodsService {
 		return goods;
 	}
 
+	
 	public void updateGoods(Goods goods) {
 		goodsMapper.updateByPrimaryKey(goods);
 		

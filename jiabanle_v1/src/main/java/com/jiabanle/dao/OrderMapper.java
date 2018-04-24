@@ -35,5 +35,8 @@ public interface OrderMapper {
     //根据id查询带User的Order
     Order selectByPrimaryKeyWithUser(Integer id);
     
+  //根据user的部门和小组查询Order
+    List<Order> selectByDTWithUser(Map<String,String> map);
+    
    
 }

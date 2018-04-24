@@ -7,6 +7,47 @@
 <title>消费查询</title>
 </head>
 <body>
+	<!-- 详情的模态框 -->
+	<div class="modal fade" id="orderDetailsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title">订单详情</h4>
+	      </div>
+	      <div class="modal-body">
+	      	  <form class="form-horizontal" enctype="multipart/form-data" id="orderDetailsForm">
+				  <div class="form-group">
+				    <label for="detailsOrderId" class="col-sm-2 control-label">订单编号:</label>
+				    <div class="col-sm-4">
+				    	<p class="form-control-static" id="detailsOrderId"></p>
+				    </div>
+				  </div>				  		  				  
+			  </form>
+			  <table class="table" id="details_table">
+					<thead>
+						<tr>						
+							<th>商品名称</th>
+							<th>原价</th>
+							<th>结算价</th>
+							<th>数量</th>
+							<th>小计</th>				
+						</tr>
+					</thead>
+					<tbody>
+						
+					
+					</tbody>
+					
+				</table>
+				 
+				  		
+	      </div>
+	      
+	    </div>
+	  </div>
+	</div>
+
 	<!-- 搭建显示页面 -->
    
 	<div class="container">
@@ -30,8 +71,7 @@
 				<select class="form-control" name="saleTime" id="sale_time_select">
 					<option value="0">所有时间</option>
 					<option value="1">法定节假</option>
-					<option value="2">晚6时后</option>
-					<option value="3">其他时间</option>										
+					<option value="2">晚6时后</option>										
 				</select>
 			  </div>
 			  <div class="form-group">
@@ -258,7 +298,7 @@
 				var userName = $("<td></td>").append(item.user.name);
 				var userDepartment = $("<td></td>").append(item.user.department);
 				var userTeam = $("<td></td>").append(item.user.team);
-				var detailsBtn = $("<button></button>").addClass("btn btn-xs user_edit_btn").append("详情");
+				var detailsBtn = $("<button></button>").addClass("btn btn-xs details_btn").append("详情");
 				//为编辑按钮添加自定义属性，来表示当前订单的id
 				detailsBtn.attr("details-id",item.id);				
 				var btn = $("<td></td>").append(detailsBtn);
@@ -344,6 +384,55 @@
 		$("#sale_get_btn").click(function(){
 			to_salepage(1);
 		});
+		
+		$(document).on("click",".details_btn", function(){	
+					
+			
+			//1.查出订单信息
+			console.log($(this).attr("details-id"));
+			getDetailsByOrderId($(this).attr("details-id"));
+			
+			
+			
+			//弹出模态框
+			$("#orderDetailsModal").modal({
+				backdrop:"static"
+			});
+		});
+		
+		function getDetailsByOrderId(id){
+			$.ajax({
+				url:"${APP_PATH}/details/"+id,
+				type:"GET",
+				success:function(result){
+					console.log(result);
+					var itemsData = result.extend.orderItems;
+					
+					$("#details_table tbody").empty();
+					
+					$.each(itemsData,function(index,item){
+						var orderId = $("#detailsOrderId").text(item.orderId);
+						var goodsName = $("<td></td>").append(item.goods.name);
+						var goodsPrice = $("<td></td>").append(item.goods.price);
+						var discountPrice = $("<td></td>").append(item.discountPrice);
+						var num = $("<td></td>").append(item.num);
+						var sum = $("<td></td>").append(item.discountPrice*item.num);
+						
+						$("<tr></tr>")
+							.append(goodsName)
+							.append(goodsPrice)
+							.append(discountPrice)
+							.append(num)
+							.append(sum)
+							.appendTo("#details_table tbody");
+					});
+					
+								
+				}				
+			});
+			
+			
+		}
 
 	
 	</script>
