@@ -3,6 +3,8 @@ package com.jiabanle.dao;
 import com.jiabanle.bean.User;
 import com.jiabanle.bean.UserExample;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface UserMapper {
@@ -29,4 +31,5 @@ public interface UserMapper {
     int updateByPrimaryKey(User record);
     
     void findUserByNameAndPwd(@Param("name")String name,@Param("password")String password);
+    
 }

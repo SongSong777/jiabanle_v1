@@ -86,6 +86,76 @@
   	o.id, o.date, o.sum, o.user_id, u.id uid, u.name, u.department, u.team 	
   </sql>
   
+  <select id="getGoodsCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+  	select sum(i.num)
+    from t_order o
+    left join order_items i on o.id=i.order_id
+    where 1=1 
+    <if test="date != null">
+    and DATE_FORMAT(o.date,'%Y-%m')=#{date,jdbcType=VARCHAR}
+    </if>       
+  </select>
+  
+  
+  <select id="getTotalSum" parameterType="java.lang.String" resultType="java.lang.Double">
+  	select sum(o.sum)
+    from t_order o
+    where 1=1 
+    <if test="date != null">
+    and DATE_FORMAT(o.date,'%Y-%m')=#{date,jdbcType=VARCHAR}
+    </if>       
+  </select>
+  
+  <select id="getUserCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+  	select count(distinct o.user_id)
+    from t_order o
+    where 1=1 
+    <if test="date != null">
+    and DATE_FORMAT(o.date,'%Y-%m')=#{date,jdbcType=VARCHAR}
+    </if>       
+  </select>
+  
+  <select id="getOrderCount" parameterType="map" resultType="java.lang.Integer">
+  	select count(o.id)
+    from t_order o
+    where 1=1 
+    <if test="date != null">
+    and DATE_FORMAT(o.date,'%Y-%m')=#{date,jdbcType=VARCHAR}
+    </if>
+    
+    <if test="time1 != null">
+    and EXISTS (SELECT 1 from restdate r where DATE_FORMAT(o.date,'%Y-%m-%d')= r.rest_date)
+    </if>
+    
+    <if test="time2 != null">
+    and (DATE_FORMAT(o.date,'%T') &gt;= '18:00:00' OR DATE_FORMAT(o.date,'%T') &lt; '07:00:00')
+    </if>
+       
+  </select>
+  
+  <select id="selectWithUserByUid" resultMap="WithUserResultMap">
+  	select o.id , o.date, o.sum, o.user_id, u.id uid, u.name 
+	from t_order o
+	left join user u on u.id=o.user_id
+	where 1=1 
+    <if test="date != null">
+    and DATE_FORMAT(o.date,'%Y-%m')=#{date,jdbcType=VARCHAR}
+    </if>
+    
+	<if test="uid != null">
+    and u.id=#{uid,jdbcType=INTEGER}
+    </if>    
+  </select>
+  
+  <select id="getSumByDateWithUser" parameterType="java.lang.String" resultType="com.jiabanle.bean.Bill">
+    select DATE_FORMAT(o.date,'%Y-%m') date, SUM(o.sum) sum, u.id uid, u.name, u.department, u.team
+	from t_order o
+	left join user u on u.id=o.user_id
+	where DATE_FORMAT(o.date,'%Y-%m')= #{date,jdbcType=VARCHAR}
+	group by o.user_id
+	order by u.department, u.team desc
+  </select>
+  
   <select id="selectByPrimaryKeyWithUser" parameterType="java.lang.Integer" resultMap="WithUserResultMap">
     select 
     <include refid="WithUser_Column_List" />

@@ -8,6 +8,20 @@
     <result column="department" jdbcType="VARCHAR" property="department" />
     <result column="team" jdbcType="VARCHAR" property="team" />
   </resultMap>
+  <resultMap id="WithOrderResultMap" type="com.jiabanle.bean.User">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="department" jdbcType="VARCHAR" property="department" />
+    <result column="team" jdbcType="VARCHAR" property="team" />
+    <collection property="orders" ofType="com.jiabanle.bean.Order">
+      <id column="oid" jdbcType="INTEGER" property="id" />
+      <result column="date" jdbcType="TIMESTAMP" property="date" />
+      <result column="sum" jdbcType="DOUBLE" property="sum" />
+      <result column="user_id" jdbcType="INTEGER" property="userId" />    
+    </collection>
+  </resultMap>
+  
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -69,6 +83,9 @@
   <sql id="Base_Column_List">
     id, name, password, department, team
   </sql>
+
+  
+  
   <select id="selectByExample" parameterType="com.jiabanle.bean.UserExample" resultMap="BaseResultMap">
     select
     <if test="distinct">

@@ -127,6 +127,7 @@
 	</div>
 	
 	<script type="text/javascript">
+	
 		
 		/* -------------------------------------------日期----------------------------------- */
 		 var last_year_month = function() {  
@@ -142,7 +143,9 @@
 	             //result.push(d.getFullYear() + "年" + m + '月');  
 	             d.setMonth(d.getMonth()-1);
 	            // alert(d.getMonth());
+	            
 	         }  
+	         
 	         return result;  
 	     }  
 	     $(function() {  
@@ -211,15 +214,15 @@
 		//跳转到相应页码的页面
 		function to_salepage(pn){
 			var data = $.param({"pn":pn})+"&"+$("#get_sales_form").serialize();
-			console.log(data);
+			//console.log(data);
 			$.ajax({
 				url:"${APP_PATH}/sales",
 				data:data,
 				type:"GET",
 				dateType:"json",
 				success:function(result){
-					console.log(result);
-					//1.解析并显示用户数据
+					//console.log(result);
+					//1.解析并显示数据
 					build_sale_table(result);
 					//2.解析并显示分页信息
 					build_sale_page_info(result);
@@ -285,7 +288,7 @@
 		
 		
 		
-	    //解析并显示用户数据
+	    //解析并显示数据
 		function build_sale_table(result){
 			//ajax无刷新，要先清空
 			$("#sales_table tbody").empty();
@@ -380,26 +383,29 @@
 			navEle.appendTo("#sales_page_nav_area");						
 		}
 		
+		
+		/* --------------------------------------条件查询---------------------------------- */
 		//条件查询
 		$("#sale_get_btn").click(function(){
 			to_salepage(1);
 		});
 		
+		
+		
+		/* --------------------------------------订单详情---------------------------------- */	
 		$(document).on("click",".details_btn", function(){	
-					
-			
+								
 			//1.查出订单信息
 			console.log($(this).attr("details-id"));
 			getDetailsByOrderId($(this).attr("details-id"));
-			
-			
-			
+					
 			//弹出模态框
 			$("#orderDetailsModal").modal({
-				backdrop:"static"
+					backdrop:"static"
 			});
 		});
-		
+			
+		//获取详情信息
 		function getDetailsByOrderId(id){
 			$.ajax({
 				url:"${APP_PATH}/details/"+id,

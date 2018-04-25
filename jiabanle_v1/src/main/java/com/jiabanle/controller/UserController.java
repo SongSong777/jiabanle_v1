@@ -32,6 +32,11 @@ import com.jiabanle.service.UserService;
 public class UserController {
 	@Autowired
 	UserService userService;
+	
+
+	
+	
+	
 	/**
 	 * 单个批量二合一
 	 * 批量删除：id1-id2-id3

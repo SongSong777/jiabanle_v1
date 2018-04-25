@@ -285,7 +285,7 @@
 				var goodsId = $("<td></td>").append(item.id);
 				var goodsName = $("<td></td>").append(item.name);
 				var goodsDes = $("<td></td>").append(item.description);
-				var goodsPrice = $("<td></td>").append(item.price);
+				var goodsPrice = $("<td></td>").append(numToMoney(item.price));
 				var image = $("<img></img>").attr("src",item.image).attr("style","width:50px;height:50px;");
 				var goodsImage = $("<td></td>").append(image).addClass("images");				
 				var goodsNumber = $("<td></td>").append(item.number);
