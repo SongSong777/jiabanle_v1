@@ -84,7 +84,9 @@
     id, name, password, department, team
   </sql>
 
-  
+  <select id="findUserByName" parameterType="String" resultType="com.jiabanle.bean.User">
+  	select * from user where name = #{name}
+  </select>
   
   <select id="selectByExample" parameterType="com.jiabanle.bean.UserExample" resultMap="BaseResultMap">
     select

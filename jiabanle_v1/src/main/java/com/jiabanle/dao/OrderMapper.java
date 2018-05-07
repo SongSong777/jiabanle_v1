@@ -47,10 +47,10 @@ public interface OrderMapper {
     //根据日期和时间段查询订单总数
 	Integer getOrderCount(Map<String,String> map);	
 	//根据日期查询消费员工数
-	Integer getUserCount(@Param("date")String date);
+	Integer getUserCount(Map<String,String> map);
 	//根据日期查询消费总额
-	double getTotalSum(@Param("date")String date);
+	double getTotalSum(Map<String,String> map);
 	//根据日期查询商品销售数量
-	Integer getGoodsCount(@Param("date")String date);
+	Integer getGoodsCount(Map<String,String> map);
 	
 }

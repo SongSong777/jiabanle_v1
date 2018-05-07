@@ -77,6 +77,13 @@ public class UserService {
 		userMapper.deleteByExample(example);
 		
 	}
+	public User checkLogin(String name, String password) {
+		User user = userMapper.findUserByName(name);
+		if(user != null && user.getPassword().equals(password)){
+			return user;
+		}
+		return null;
+	}
 	
 
 

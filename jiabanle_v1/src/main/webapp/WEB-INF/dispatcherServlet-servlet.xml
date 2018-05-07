@@ -17,11 +17,17 @@
         http://www.springframework.org/schema/context     
         http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
+ 
+	
+	
 	<!-- SpringMVC的配置文件，包含网站跳转逻辑的控制，配置 -->
 	<context:component-scan base-package="com.jiabanle" use-default-filters="false">
 	    <!-- 只扫描控制器 -->
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>	    
 	</context:component-scan>
+	
+	
+	
 	<!-- 配置视图解析器，方便页面返回解析 -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 	    <property name="prefix" value="/WEB-INF/views/"></property>
@@ -35,5 +41,14 @@
 	
 	<!-- 能支持SpringMVC更高级的功能，JSR303校验，快捷ajax请求，……，映射动态请求 -->
 	<mvc:annotation-driven />
+	
+	
+	<mvc:cors>  
+	    <mvc:mapping path="/*"  
+	                 allowed-origins="http://127.0.0.1:8020"  
+	                 allowed-methods="POST, GET, OPTIONS, DELETE, PUT"  
+	                 allowed-headers="Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"  
+	                 allow-credentials="true" />  
+	</mvc:cors>  
 	
 </beans>

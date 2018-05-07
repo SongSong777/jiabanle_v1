@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,14 +31,37 @@ import com.jiabanle.service.UserService;
  * 处理用户CRUD请求
  * @author swf19
  */
+@CrossOrigin(maxAge = 3600)
 @Controller
 public class UserController {
+	
 	@Autowired
 	UserService userService;
 	
-
+	
+	@CrossOrigin("http://127.0.0.1:8020")
+	@RequestMapping(value="/userLogin",method=RequestMethod.POST)
+	@ResponseBody
+	public Msg loginCheckUser(@RequestBody User user) {
+		//System.out.println(user);
+		User u = userService.checkLogin(user.getName(), user.getPassword());
+		if(u != null){
+			//登录成功
+			
+			return Msg.success().add("msg", "登录成功").add("user", u);
+		}else{
+			//登录失败
+			return Msg.fail().add("msg", "登录名和密码错误，请重新输入");
+		}
+	}
 	
 	
+	
+	
+	
+	/*
+	 * **********************************************后台管理*******************************************
+	 */
 	
 	/**
 	 * 单个批量二合一

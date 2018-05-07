@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,6 +27,7 @@ import com.github.pagehelper.PageInfo;
 import com.jiabanle.bean.Goods;
 import com.jiabanle.bean.Msg;
 import com.jiabanle.bean.Stock;
+import com.jiabanle.service.CartService;
 import com.jiabanle.service.GoodsService;
 import com.jiabanle.service.StockService;
 
@@ -34,7 +36,7 @@ import com.jiabanle.service.StockService;
  * @author swf19
  *
  */
-
+@CrossOrigin(maxAge = 3600)
 @Controller
 public class GoodsController {
 	@Autowired
@@ -42,7 +44,22 @@ public class GoodsController {
 	
 	@Autowired
 	StockService stockService;
-		
+	
+	@Autowired
+	CartService cartService;
+	
+	
+	@CrossOrigin("http://127.0.0.1:8020")
+	@RequestMapping("/appgoods")
+	@ResponseBody	
+	public Msg getAppGoods() {
+		List<Goods> goods = goodsService.getAll();
+		return Msg.success().add("goods", goods);
+
+	}
+
+	
+	
 	/**
 	 * 查询商品列表
 	 * @param pn
@@ -123,6 +140,7 @@ public class GoodsController {
 			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 			//获取文件类型（判断不是图片禁止上传）
 			String contentType = goods.getFile().getContentType();
+			//System.out.println(contentType);
 			//获取文件后缀名
 			String suffixName = contentType.substring(contentType.indexOf("/")+1);
 			//得到文件名

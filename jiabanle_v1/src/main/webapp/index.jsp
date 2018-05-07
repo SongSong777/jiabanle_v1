@@ -60,7 +60,7 @@
 			</div>
 			<div class="login-con w-fr">
 				<div class="login-con-c" style="background:white">
-					<form id="loginForm" action="${APP_PATH}/login" method="post" >
+					<form id="loginForm" >
 						<div class="login-tit">
 							<span class="login-error left" style="display:none;"></span>
 							<span class="login-title" style="display:inline;">登录</span>
@@ -90,19 +90,19 @@
 						
 						<div class="login-item1">
 							<span class="w-fl login-remember">
-								<input type="checkbox" value="1" id="" name="remember_me">
+								<!-- <input type="checkbox" value="1" id="" name="remember_me"> -->
 							</span>
-							<span class="w-fl">记住密码</span>
+							<span class="w-fl"></span>
 							
 						</div>
 						<input type="hidden" name="redirect_uri" value="">
 						<div class="login-item1">
 							<span class="w-fl login-button">
-								<input name="" id="login_submit" type="submit" value="登录" class="">
+								<input name="" id="login_submit" type="button" value="登录" class="">
 								
 							</span>							
 						</div>
-						<div>${requestScope.error}</div>
+						
 						
 
 					</form>
@@ -151,17 +151,12 @@ function check_password(obj) {
 
 $(function () {
 	$("#loginForm")[0].reset();
+	$('#password').val('');
 
-	var but_click = false;
-
-	// 本次url
-	var location_href = window.location.href;
-	$('#user_name').attr('disabled', false);
 	
 	$('#user_name').on('blur', function () {
-		if (!check_user_name($(this))) {
-			return false;
-		}
+		check_user_name($(this));
+
 	});
 	
 	$('#password').on('blur', function () {
@@ -171,6 +166,36 @@ $(function () {
 	
 })
 
+$("#login_submit").click(function(){
+	if (!check_user_name($('#user_name'))) {
+		return false;
+	}
+	
+	if (!check_password($('#password'))) {
+		return false;
+	}
+	
+
+	$.ajax({
+		url:"${APP_PATH}/login",
+		type:"POST",
+		data:$("#loginForm").serialize(),
+		success:function(result){
+			console.log(result);
+			//登录成功
+			if(result.code == 100){
+				location.href = "${APP_PATH}/home";
+			}else{
+				loginTitle.hide();loginError.show().text(result.extend.msg);
+				$("#loginForm")[0].reset();
+				$('#user_name').focus();
+			}
+		}
+	});
+	
+	
+	
+})
 
 
 

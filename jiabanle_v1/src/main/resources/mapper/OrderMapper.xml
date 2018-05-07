@@ -86,41 +86,63 @@
   	o.id, o.date, o.sum, o.user_id, u.id uid, u.name, u.department, u.team 	
   </sql>
   
-  <select id="getGoodsCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+  <select id="getGoodsCount" parameterType="map" resultType="java.lang.Integer">
   	select sum(i.num)
     from t_order o
     left join order_items i on o.id=i.order_id
     where 1=1 
-    <if test="date != null">
-    and DATE_FORMAT(o.date,'%Y-%m')=#{date,jdbcType=VARCHAR}
+    <if test="date1 != null">
+    and DATE_FORMAT(o.date,'%Y-%m')=#{date1,jdbcType=VARCHAR}
+    </if>
+    <if test="date2 != null">
+    and DATE_FORMAT(o.date,'%Y')=#{date2,jdbcType=VARCHAR}
     </if>       
   </select>
   
   
-  <select id="getTotalSum" parameterType="java.lang.String" resultType="java.lang.Double">
+  <select id="getTotalSum" parameterType="map" resultType="java.lang.Double">
   	select sum(o.sum)
     from t_order o
     where 1=1 
-    <if test="date != null">
-    and DATE_FORMAT(o.date,'%Y-%m')=#{date,jdbcType=VARCHAR}
+    <if test="date1 != null">
+    and DATE_FORMAT(o.date,'%Y-%m')=#{date1,jdbcType=VARCHAR}
+    </if>
+    <if test="date2 != null">
+    and DATE_FORMAT(o.date,'%Y')=#{date2,jdbcType=VARCHAR}
     </if>       
   </select>
   
-  <select id="getUserCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+  <select id="getUserCount" parameterType="map" resultType="java.lang.Integer">
   	select count(distinct o.user_id)
     from t_order o
     where 1=1 
-    <if test="date != null">
-    and DATE_FORMAT(o.date,'%Y-%m')=#{date,jdbcType=VARCHAR}
-    </if>       
+    <if test="date1 != null">
+    and DATE_FORMAT(o.date,'%Y-%m')=#{date1,jdbcType=VARCHAR}
+    </if> 
+    
+    <if test="date2 != null">
+    and DATE_FORMAT(o.date,'%Y')=#{date2,jdbcType=VARCHAR}
+    </if>
+    
+    <if test="time1 != null">
+    and EXISTS (SELECT 1 from restdate r where DATE_FORMAT(o.date,'%Y-%m-%d')= r.rest_date)
+    </if>
+    
+    <if test="time2 != null">
+    and (DATE_FORMAT(o.date,'%T') &gt;= '18:00:00' OR DATE_FORMAT(o.date,'%T') &lt; '07:00:00')
+    </if>     
   </select>
   
   <select id="getOrderCount" parameterType="map" resultType="java.lang.Integer">
   	select count(o.id)
     from t_order o
     where 1=1 
-    <if test="date != null">
-    and DATE_FORMAT(o.date,'%Y-%m')=#{date,jdbcType=VARCHAR}
+    <if test="date1 != null">
+    and DATE_FORMAT(o.date,'%Y-%m')=#{date1,jdbcType=VARCHAR}
+    </if>
+    
+    <if test="date2 != null">
+    and DATE_FORMAT(o.date,'%Y')=#{date2,jdbcType=VARCHAR}
     </if>
     
     <if test="time1 != null">
