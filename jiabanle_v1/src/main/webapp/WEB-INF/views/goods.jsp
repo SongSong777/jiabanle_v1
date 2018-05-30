@@ -404,10 +404,10 @@
 			//1.拿到要校验的数据，使用正则表达式
 			//验证商品名
 			var goodsName = $("#name_add_input").val();
-			var regName = /^[\u2E80-\u9FFF]{2,20}$/;
+			var regName = /^[\u2E80-\u9FFF_a-zA-Z]{2,20}$/;
 			
 			if(!regName.test(goodsName)){				
-				show_validate_msg("#name_add_input","error","商品名称为2-20位中文");
+				show_validate_msg("#name_add_input","error","商品名称为2-20位中文/英文");
 				return false;
 			}else{
 				show_validate_msg("#name_add_input","success","");

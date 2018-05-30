@@ -10,12 +10,24 @@ import org.springframework.stereotype.Service;
 import com.jiabanle.bean.Goods;
 import com.jiabanle.bean.GoodsExample;
 import com.jiabanle.bean.GoodsExample.Criteria;
+import com.jiabanle.bean.OrderItems;
 import com.jiabanle.dao.GoodsMapper;
 
 @Service
 public class GoodsService {
 	@Autowired
 	GoodsMapper goodsMapper;
+	
+	public void updateGoodsNum(List<OrderItems> orderItems) {
+		for(OrderItems items: orderItems){
+			Goods goods = goodsMapper.selectByPrimaryKey(items.getGoodsId());
+			goods.setNumber(goods.getNumber()-items.getNum());
+			//System.out.println(goods);
+			goodsMapper.updateByPrimaryKeySelective(goods);
+		}
+		
+	}
+			
 	
 	/**
 	 * 获取所有商品
@@ -65,6 +77,16 @@ public class GoodsService {
 		goodsMapper.deleteByPrimaryKey(id);
 		
 	}
+
+	public List<Goods> getBatch(List<Integer> goods_ids) {
+		GoodsExample example = new GoodsExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andIdIn(goods_ids);		
+		List<Goods> list = goodsMapper.selectByExample(example);
+		return list;
+	}
+
+	
 	
 	
 

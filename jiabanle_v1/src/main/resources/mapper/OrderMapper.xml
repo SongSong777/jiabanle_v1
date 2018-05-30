@@ -21,6 +21,26 @@
     </association>    
   </resultMap>
   
+  <resultMap id="WithItemsResultMap" type="com.jiabanle.bean.Order">
+    <id column="oid" jdbcType="INTEGER" property="id" />
+    <result column="date" jdbcType="TIMESTAMP" property="date" />
+    <result column="sum" jdbcType="DOUBLE" property="sum" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" /> 
+    <collection property="orderItems" ofType="com.jiabanle.bean.OrderItems" javaType="ArrayList">
+    	<id column="oiid" jdbcType="BIGINT" property="id" />
+    	<result column="order_id" jdbcType="INTEGER" property="orderId" />
+    	<result column="goods_id" jdbcType="INTEGER" property="goodsId" />
+    	<result column="discount_price" jdbcType="DOUBLE" property="discountPrice" />
+    	<result column="num" jdbcType="INTEGER" property="num" />
+    	<association property="goods" javaType="com.jiabanle.bean.Goods">
+	      <id column="gid" jdbcType="INTEGER" property="id" />
+	      <result column="name" jdbcType="VARCHAR" property="name" />	      
+	      <result column="image" jdbcType="VARCHAR" property="image" />  
+	    </association>
+    </collection>
+  </resultMap>
+  
+  
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -85,6 +105,36 @@
   <sql id="WithUser_Column_List">
   	o.id, o.date, o.sum, o.user_id, u.id uid, u.name, u.department, u.team 	
   </sql>
+  
+  <select id="selectWithItemsByUid" parameterType="java.lang.Integer" resultMap="WithItemsResultMap">
+	SELECT o.id oid, o.date, o.sum, o.user_id,
+		oi.id oiid, oi.order_id, oi.goods_id, oi.discount_price, oi.num, 
+		g.id gid, g.name, g.image, g.price, g.number
+	FROM t_order o
+	JOIN order_items oi on o.id=oi.order_id
+	JOIN goods g on oi.goods_id=g.id
+	where o.user_id=#{uid,jdbcType=INTEGER}
+	order by o.id desc   
+  </select>
+  
+  <select id="selectWithItemsByUidAndDate" resultMap="WithItemsResultMap">
+	SELECT o.id oid, o.date, o.sum, o.user_id,
+		oi.id oiid, oi.order_id, oi.goods_id, oi.discount_price, oi.num, 
+		g.id gid, g.name, g.image, g.price, g.number
+	FROM t_order o
+	JOIN order_items oi on o.id=oi.order_id
+	JOIN goods g on oi.goods_id=g.id
+	where o.user_id=#{userId,jdbcType=INTEGER}
+	and DATE_FORMAT(o.date,'%Y-%m-%d')=#{date,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectBillByUid" parameterType="java.lang.Integer" resultType="com.jiabanle.bean.Bills">
+  	SELECT DATE_FORMAT(o.date,'%Y-%m') yMonth, SUM(o.sum) bCount
+	FROM t_order o
+	WHERE o.user_id=#{uid,jdbcType=INTEGER}
+	GROUP BY DATE_FORMAT(o.date,'%Y-%m')
+	ORDER BY DATE_FORMAT(o.date,'%Y-%m')
+  </select>
   
   <select id="getGoodsCount" parameterType="map" resultType="java.lang.Integer">
   	select sum(i.num)
@@ -231,6 +281,12 @@
        
   </select>
   
+  <insert id="insertOrder" parameterType="com.jiabanle.bean.Order" useGeneratedKeys="true" keyProperty="id">  	  
+    insert into t_order (date, sum, user_id)
+    values (#{date,jdbcType=TIMESTAMP}, #{sum,jdbcType=DOUBLE}, 
+      #{userId,jdbcType=INTEGER})
+  </insert>
+  
   <select id="selectByExample" parameterType="com.jiabanle.bean.OrderExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
@@ -261,7 +317,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jiabanle.bean.Order">
+  <insert id="insert" parameterType="com.jiabanle.bean.Order">  	  
     insert into t_order (id, date, sum, 
       user_id)
     values (#{id,jdbcType=INTEGER}, #{date,jdbcType=TIMESTAMP}, #{sum,jdbcType=DOUBLE}, 

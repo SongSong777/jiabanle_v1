@@ -14,7 +14,7 @@ public class Order {
     
     private User user;
     
-    private List<OrderItems> OrderItems;
+    private List<OrderItems> orderItems;
     
     
 
@@ -64,10 +64,10 @@ public class Order {
 	}
 
 	public List<OrderItems> getOrderItems() {
-		return OrderItems;
+		return orderItems;
 	}
 
 	public void setOrderItems(List<OrderItems> orderItems) {
-		OrderItems = orderItems;
+		this.orderItems = orderItems;
 	}
 }

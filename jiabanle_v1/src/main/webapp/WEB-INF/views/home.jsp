@@ -45,6 +45,7 @@
 			<li role="presentation"><a href="#">消费查询</a></li>
 			<li role="presentation"><a href="#">用户管理</a></li>
 			<li role="presentation"><a href="#">商品管理</a></li>
+			<li role="presentation"><a href="#">休息日管理</a></li>
 		</ul>
 	</div>
 		
@@ -67,8 +68,11 @@
 		</div>
 		
 		<div style="display: none">
-			<%@ include file="goods.jsp" %>
-			
+			<%@ include file="goods.jsp" %>			
+		</div>
+		
+		<div style="display: none">
+			<%@ include file="restdate.jsp" %>			
 		</div>
 
 	</div>

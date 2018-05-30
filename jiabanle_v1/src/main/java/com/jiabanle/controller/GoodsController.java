@@ -2,6 +2,7 @@ package com.jiabanle.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +50,8 @@ public class GoodsController {
 	CartService cartService;
 	
 	
+	
+	
 	@CrossOrigin("http://127.0.0.1:8020")
 	@RequestMapping("/appgoods")
 	@ResponseBody	
@@ -56,6 +59,34 @@ public class GoodsController {
 		List<Goods> goods = goodsService.getAll();
 		return Msg.success().add("goods", goods);
 
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/checkedgoods/{ids}",method=RequestMethod.GET)
+	public Msg getGoodsByIds(@PathVariable("ids")String ids) {
+		//System.out.println(ids);
+		List<Goods> list = new ArrayList<>();
+		if(ids.contains("-")){
+			List<Integer> goods_ids = new ArrayList<>();
+			String[] str_ids = ids.split("-");
+			//组装id的集合
+			for (String id : str_ids) {
+				goods_ids.add(Integer.parseInt(id));
+				//System.out.println(id);
+			}
+			list = goodsService.getBatch(goods_ids);
+			//System.out.println(list);
+			
+		}else{
+			int goods_id = Integer.parseInt(ids);
+			//System.out.println(goods_id);
+			Goods goods = goodsService.getGoods(goods_id);
+			//System.out.println(goods);
+			list.add(goods);
+		}
+		//System.out.println(list);
+		return Msg.success().add("list", list);
+		
 	}
 
 	
@@ -79,15 +110,15 @@ public class GoodsController {
 	@ResponseBody
 	@RequestMapping("/checkgoods")
 	public Msg checkGoods(@RequestParam("goodsName")String goodsName) {
-		String regex = "^[\u2E80-\u9FFF]{2,20}$";
+		String regex = "^[\u2E80-\u9FFF_a-zA-Z]{2,20}$";
 		if(!goodsName.matches(regex)){
-			return Msg.fail().add("va_msg", "商品名称必须是2-20位中文");
+			return Msg.fail().add("va_msg", "商品名称必须是2-20位中文/英文");
 		}
 		boolean b = goodsService.checkGoods(goodsName);
 		if(b){
 			return Msg.success();
 		}else {
-			return Msg.fail().add("va_msg", "商品名称不可用");
+			return Msg.fail().add("va_msg", "商品名称已存在，换一个吧");
 		}
 		
 		
@@ -111,8 +142,8 @@ public class GoodsController {
 			Map<String, Object> map = new HashMap<>();
 			List<FieldError> errors = result.getFieldErrors();
 			for(FieldError fieldError :errors){
-				System.out.println("错误的字段名："+fieldError.getField());
-				System.out.println("错误信息："+fieldError.getDefaultMessage());			
+				//System.out.println("错误的字段名："+fieldError.getField());
+				//System.out.println("错误信息："+fieldError.getDefaultMessage());			
 				map.put(fieldError.getField(), fieldError.getDefaultMessage());
 			}
 			return Msg.fail().add("errorFields", map);
@@ -131,7 +162,7 @@ public class GoodsController {
 		//文件保存的本地路径
 		//String localPath = request.getSession().getServletContext().getRealPath("/images");
 		String localPath = "D:\\jiabanle\\";
-		System.out.println(localPath);						
+		//System.out.println(localPath);						
 		//定义文件名
 		String filename = null;
 
@@ -145,7 +176,7 @@ public class GoodsController {
 			String suffixName = contentType.substring(contentType.indexOf("/")+1);
 			//得到文件名
 			filename = uuid+"."+suffixName;
-			System.out.println(filename);
+			//System.out.println(filename);
 			File dir = new File(localPath,filename);
 			if(!dir.exists()){
 				dir.mkdirs();
@@ -154,7 +185,7 @@ public class GoodsController {
 		}
 		//把图片相对路径保存至数据库
 		sqlPath = "/images/"+filename;
-		System.out.println(sqlPath);			
+		//System.out.println(sqlPath);			
 		goods.setImage(sqlPath);
 		return goods;
 		
@@ -210,7 +241,7 @@ public class GoodsController {
 	@RequestMapping(value="/goods/{id}", method=RequestMethod.DELETE)
 	@ResponseBody
 	public Msg deleteGoods(@PathVariable Integer id) {
-		System.out.println(id);
+		//System.out.println(id);
 		goodsService.deleteGoods(id);
 		return Msg.success();
 		
@@ -237,7 +268,7 @@ public class GoodsController {
 	@ResponseBody
 	public Msg saveStock(@Valid Stock stock,BindingResult result) {
 		Goods goods = goodsService.getGoods(stock.getGoodsId());
-		System.out.println(goods);
+		//System.out.println(goods);
 		if(result.hasErrors()){
 			//校验失败，应该返回失败，在模态框中显示校验失败的错误信息
 			Map<String, Object> map = new HashMap<>();
@@ -252,7 +283,7 @@ public class GoodsController {
 			stockService.saveStock(stock);
 			
 			goods.setNumber(goods.getNumber()+stock.getStockNum());
-			System.out.println(goods);
+			//System.out.println(goods);
 			goodsService.updateGoods(goods);
 			
 			return Msg.success();

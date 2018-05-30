@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class Goods {
     private Integer id;
     
-    @Pattern(regexp="^[\u2E80-\u9FFF]{2,20}$",message="商品名称必须是2-20位中文")
+    @Pattern(regexp="^[\u2E80-\u9FFF_a-zA-Z]{2,20}$",message="商品名称必须是2-20位中文/英文")
     private String name;
 
     private String description;

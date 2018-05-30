@@ -8,7 +8,7 @@
     <result column="discount_price" jdbcType="DOUBLE" property="discountPrice" />
     <result column="num" jdbcType="INTEGER" property="num" />
   </resultMap>
-    <resultMap id="WithGoodsResultMap" type="com.jiabanle.bean.OrderItems">
+  <resultMap id="WithGoodsResultMap" type="com.jiabanle.bean.OrderItems">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="order_id" jdbcType="INTEGER" property="orderId" />
     <result column="goods_id" jdbcType="INTEGER" property="goodsId" />

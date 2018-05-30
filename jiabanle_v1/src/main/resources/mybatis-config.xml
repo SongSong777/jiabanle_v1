@@ -6,6 +6,7 @@
   	<settings>
   		<!-- 驼峰命名规则 -->
   		<setting name="mapUnderscoreToCamelCase" value="true"/>
+ 		
   	</settings>
   	
   	<!-- 注册PageHelper组件 -->

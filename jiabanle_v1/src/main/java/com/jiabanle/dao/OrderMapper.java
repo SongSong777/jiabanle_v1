@@ -1,6 +1,7 @@
 package com.jiabanle.dao;
 
 import com.jiabanle.bean.Bill;
+import com.jiabanle.bean.Bills;
 import com.jiabanle.bean.Order;
 import com.jiabanle.bean.OrderExample;
 
@@ -52,5 +53,16 @@ public interface OrderMapper {
 	double getTotalSum(Map<String,String> map);
 	//根据日期查询商品销售数量
 	Integer getGoodsCount(Map<String,String> map);
+	//插入order返回自增id
+	int insertOrder(Order order);
+	
+	//根据userId查询带orderItems的order
+	List<Order> selectWithItemsByUid(Integer uid);
+	//根据userId查询每月账单
+	List<Bills> selectBillByUid(Integer uid);
+	//根据userId和date查询带orderItems的order
+	List<Order> selectWithItemsByUidAndDate(@Param("userId")Integer userId, @Param("date")String date);
+
+	
 	
 }
